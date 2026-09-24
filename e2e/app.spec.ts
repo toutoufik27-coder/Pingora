@@ -12,6 +12,9 @@ test("marketing pages, robots and health check", async ({ page, request }) => {
   await expect(page.getByRole("heading", { name: "Privacy policy" })).toBeVisible();
 
   expect((await request.get("/robots.txt")).status()).toBe(200);
+  const manifest = await (await request.get("/manifest.webmanifest")).json();
+  expect(manifest).toMatchObject({ display: "standalone", start_url: "/dashboard" });
+  expect((await request.get("/icons/icon-512.png")).headers()["content-type"]).toBe("image/png");
   expect(await (await request.get("/api/health")).json()).toEqual({ ok: true });
   const headers = (await request.get("/")).headers();
   expect(headers["x-frame-options"]).toBe("DENY");

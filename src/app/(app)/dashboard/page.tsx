@@ -86,7 +86,7 @@ export default async function DashboardPage() {
         </Card>
       ) : null}
 
-      <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mb-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
         <StatCard label={`Your fees · ${period.label}`} value={formatMoney(sum((s) => s.totals.cohostFeesCents))} tone="brand" />
         <StatCard label="Payouts" value={formatMoney(sum((s) => s.totals.payoutCents))} hint={`${sum((s) => s.totals.bookings)} bookings`} />
         <StatCard label="You owe owners" value={formatMoney(dueToOwners)} hint="Where you collect the payouts" />

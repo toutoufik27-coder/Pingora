@@ -63,9 +63,9 @@ export function Card({ title, description, actions, children, className = "" }: 
 
 export function StatCard({ label, value, hint, tone = "default" }: { label: string; value: ReactNode; hint?: ReactNode; tone?: "default" | "brand" }) {
   return (
-    <div className={`rounded-xl border px-5 py-4 shadow-sm ${tone === "brand" ? "border-brand-100 bg-brand-50" : "border-slate-200 bg-white"}`}>
-      <div className="text-xs font-medium tracking-wide text-slate-500 uppercase">{label}</div>
-      <div className="tabular mt-1 text-2xl font-semibold text-slate-900">{value}</div>
+    <div className={`min-w-0 rounded-xl border px-4 py-3 shadow-sm sm:px-5 sm:py-4 ${tone === "brand" ? "border-brand-100 bg-brand-50" : "border-slate-200 bg-white"}`}>
+      <div className="text-[11px] font-medium tracking-wide text-slate-500 uppercase sm:text-xs">{label}</div>
+      <div className="tabular mt-1 text-lg font-semibold text-slate-900 sm:text-2xl">{value}</div>
       {hint ? <div className="mt-1 text-xs text-slate-500">{hint}</div> : null}
     </div>
   );

@@ -25,8 +25,7 @@ function describeLine(line: StatementLine): string {
 export function SettlementText({ cents, currency, viewer }: { cents: number; currency?: string; viewer: StatementViewer }) {
   if (cents === 0) return <span className="tabular text-slate-500">Settled · {formatMoney(0, currency)}</span>;
   const toOwner = cents > 0;
-  const label =
-    viewer === "cohost" ? (toOwner ? "Pay owner " : "Owner pays you ") : toOwner ? "Due to you " : "You owe your co-host ";
+  const label = viewer === "cohost" ? (toOwner ? "Pay owner " : "Owner pays you ") : toOwner ? "Due to you " : "You owe your co-host ";
   return (
     <span className="tabular">
       <span className={toOwner ? "text-brand-700" : "text-amber-700"}>{label}</span>
@@ -47,15 +46,27 @@ export function StatementView({ statement, viewer }: { statement: OwnerStatement
         </div>
       ) : null}
 
-      <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Payouts" value={formatMoney(totals.payoutCents, currency)} hint={`${totals.bookings} bookings · ${totals.nights} nights`} />
+      <div className="mb-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+        <StatCard
+          label="Payouts"
+          value={formatMoney(totals.payoutCents, currency)}
+          hint={`${totals.bookings} bookings · ${totals.nights} nights`}
+        />
         <StatCard label={viewer === "cohost" ? "Your fees" : "Co-host fees"} value={formatMoney(totals.cohostFeesCents, currency)} />
         <StatCard
           label="Expenses"
           value={formatMoney(totals.reimbursableExpensesCents + totals.ownerPaidExpensesCents, currency)}
-          hint={`${formatMoney(totals.reimbursableExpensesCents, currency)} paid by ${viewer === "cohost" ? "you" : "your co-host"}`}
+          hint={
+            totals.reimbursableExpensesCents
+              ? `${formatMoney(totals.reimbursableExpensesCents, currency)} paid by ${viewer === "cohost" ? "you" : "your co-host"}`
+              : undefined
+          }
         />
-        <StatCard label={viewer === "cohost" ? "Owner net income" : "Your net income"} value={formatMoney(totals.ownerNetCents, currency)} tone="brand" />
+        <StatCard
+          label={viewer === "cohost" ? "Owner net income" : "Your net income"}
+          value={formatMoney(totals.ownerNetCents, currency)}
+          tone="brand"
+        />
       </div>
 
       <Card className="mb-6">
@@ -110,65 +121,97 @@ function PropertySection({ section, currency, viewer }: { section: PropertyState
       {section.lines.length === 0 ? (
         <p className="text-sm text-slate-500">No bookings in this period.</p>
       ) : (
-        <TableWrap>
-          <table className={tableClass}>
-            <thead>
-              <tr>
-                <th className={thClass}>Date</th>
-                <th className={thClass}>Guest / item</th>
-                <th className={`${thClass} text-right`}>Nights</th>
-                <th className={thClass}>Code</th>
-                <th className={`${thClass} text-right`}>Gross</th>
-                <th className={`${thClass} text-right`}>Platform fee</th>
-                <th className={`${thClass} text-right`}>Payout</th>
-                <th className={`${thClass} text-right`}>{viewer === "cohost" ? "Your fee" : "Co-host fee"}</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {section.lines.map((line) => (
-                <tr key={line.transaction.id}>
-                  <td className={`${tdClass} whitespace-nowrap`}>{formatDate(line.attributionDate)}</td>
-                  <td className={tdClass}>{describeLine(line)}</td>
-                  <td className={`${tdClass} tabular text-right`}>{line.transaction.nights ?? ""}</td>
-                  <td className={`${tdClass} font-mono text-xs`}>{line.transaction.confirmationCode}</td>
-                  <td className={`${tdClass} text-right`}>
-                    <Money cents={line.grossCents} currency={currency} />
-                  </td>
-                  <td className={`${tdClass} text-right`}>
-                    <Money cents={-line.transaction.serviceFeeCents} currency={currency} />
-                  </td>
-                  <td className={`${tdClass} text-right`}>
-                    <Money cents={line.transaction.amountCents} currency={currency} />
-                  </td>
-                  <td className={`${tdClass} text-right`}>
-                    <Money cents={line.fee.totalCents} currency={currency} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-            <tfoot className="border-t-2 border-slate-200 font-semibold text-slate-900">
-              <tr>
-                <td className={tdClass} colSpan={2}>
-                  Total · {totals.bookings} booking{totals.bookings === 1 ? "" : "s"}
-                </td>
-                <td className={`${tdClass} tabular text-right`}>{totals.nights}</td>
-                <td className={tdClass} />
-                <td className={`${tdClass} text-right`}>
-                  <Money cents={totals.grossCents} currency={currency} />
-                </td>
-                <td className={`${tdClass} text-right`}>
-                  <Money cents={-totals.serviceFeeCents} currency={currency} />
-                </td>
-                <td className={`${tdClass} text-right`}>
-                  <Money cents={totals.payoutCents} currency={currency} />
-                </td>
-                <td className={`${tdClass} text-right`}>
-                  <Money cents={totals.commissionCents + totals.flatFeesCents + totals.cleaningFeesToCohostCents} currency={currency} />
-                </td>
-              </tr>
-            </tfoot>
-          </table>
-        </TableWrap>
+        <>
+          {/* Phones: one compact card per line instead of an eight-column table. */}
+          <ul className="-mx-1 divide-y divide-slate-100 sm:hidden">
+            {section.lines.map((line) => (
+              <li key={line.transaction.id} className="px-1 py-3 text-sm">
+                <div className="flex items-baseline justify-between gap-3">
+                  <span className="min-w-0 truncate font-medium text-slate-900">{describeLine(line)}</span>
+                  <Money cents={line.transaction.amountCents} currency={currency} className="shrink-0 font-medium text-slate-900" />
+                </div>
+                <div className="mt-1 flex items-baseline justify-between gap-3 text-xs text-slate-500">
+                  <span>
+                    {formatDate(line.attributionDate)}
+                    {line.transaction.nights ? ` · ${line.transaction.nights} nights` : ""}
+                    {line.transaction.confirmationCode ? ` · ${line.transaction.confirmationCode}` : ""}
+                  </span>
+                  <span className="shrink-0">
+                    {viewer === "cohost" ? "Your fee" : "Co-host fee"} <Money cents={line.fee.totalCents} currency={currency} />
+                  </span>
+                </div>
+              </li>
+            ))}
+            <li className="flex items-baseline justify-between gap-3 px-1 pt-3 text-sm font-semibold text-slate-900">
+              <span>
+                {totals.bookings} booking{totals.bookings === 1 ? "" : "s"} · {totals.nights} nights
+              </span>
+              <Money cents={totals.payoutCents} currency={currency} />
+            </li>
+          </ul>
+          <div className="hidden sm:block">
+            <TableWrap>
+              <table className={tableClass}>
+                <thead>
+                  <tr>
+                    <th className={thClass}>Date</th>
+                    <th className={thClass}>Guest / item</th>
+                    <th className={`${thClass} text-right`}>Nights</th>
+                    <th className={thClass}>Code</th>
+                    <th className={`${thClass} text-right`}>Gross</th>
+                    <th className={`${thClass} text-right`}>Platform fee</th>
+                    <th className={`${thClass} text-right`}>Payout</th>
+                    <th className={`${thClass} text-right`}>{viewer === "cohost" ? "Your fee" : "Co-host fee"}</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {section.lines.map((line) => (
+                    <tr key={line.transaction.id}>
+                      <td className={`${tdClass} whitespace-nowrap`}>{formatDate(line.attributionDate)}</td>
+                      <td className={tdClass}>{describeLine(line)}</td>
+                      <td className={`${tdClass} tabular text-right`}>{line.transaction.nights ?? ""}</td>
+                      <td className={`${tdClass} font-mono text-xs`}>{line.transaction.confirmationCode}</td>
+                      <td className={`${tdClass} text-right`}>
+                        <Money cents={line.grossCents} currency={currency} />
+                      </td>
+                      <td className={`${tdClass} text-right`}>
+                        <Money cents={-line.transaction.serviceFeeCents} currency={currency} />
+                      </td>
+                      <td className={`${tdClass} text-right`}>
+                        <Money cents={line.transaction.amountCents} currency={currency} />
+                      </td>
+                      <td className={`${tdClass} text-right`}>
+                        <Money cents={line.fee.totalCents} currency={currency} />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot className="border-t-2 border-slate-200 font-semibold text-slate-900">
+                  <tr>
+                    <td className={tdClass} colSpan={2}>
+                      Total · {totals.bookings} booking
+                      {totals.bookings === 1 ? "" : "s"}
+                    </td>
+                    <td className={`${tdClass} tabular text-right`}>{totals.nights}</td>
+                    <td className={tdClass} />
+                    <td className={`${tdClass} text-right`}>
+                      <Money cents={totals.grossCents} currency={currency} />
+                    </td>
+                    <td className={`${tdClass} text-right`}>
+                      <Money cents={-totals.serviceFeeCents} currency={currency} />
+                    </td>
+                    <td className={`${tdClass} text-right`}>
+                      <Money cents={totals.payoutCents} currency={currency} />
+                    </td>
+                    <td className={`${tdClass} text-right`}>
+                      <Money cents={totals.commissionCents + totals.flatFeesCents + totals.cleaningFeesToCohostCents} currency={currency} />
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </TableWrap>
+          </div>
+        </>
       )}
 
       {section.expenses.length > 0 ? (
@@ -181,7 +224,15 @@ function PropertySection({ section, currency, viewer }: { section: PropertyState
                   {formatDate(e.date)} · {e.category}
                   {e.description ? ` · ${e.description}` : ""}{" "}
                   <span className="text-slate-500">
-                    ({e.paidBy === "cohost" ? (viewer === "cohost" ? "paid by you" : "paid by your co-host") : viewer === "cohost" ? "paid by owner" : "paid by you"})
+                    (
+                    {e.paidBy === "cohost"
+                      ? viewer === "cohost"
+                        ? "paid by you"
+                        : "paid by your co-host"
+                      : viewer === "cohost"
+                        ? "paid by owner"
+                        : "paid by you"}
+                    )
                   </span>
                 </span>
                 <Money cents={e.amountCents} currency={currency} />

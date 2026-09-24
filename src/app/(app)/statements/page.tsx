@@ -2,7 +2,20 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ActionForm } from "@/components/action-form";
 import { MonthPicker } from "@/components/period-picker";
-import { Alert, Badge, Balance, ButtonLink, Card, EmptyState, Money, PageHeader, TableWrap, tableClass, tdClass, thClass } from "@/components/ui";
+import {
+  Alert,
+  Badge,
+  Balance,
+  ButtonLink,
+  Card,
+  EmptyState,
+  Money,
+  PageHeader,
+  TableWrap,
+  tableClass,
+  tdClass,
+  thClass,
+} from "@/components/ui";
 import { monthPeriod } from "@/lib/dates";
 import { ATTRIBUTION_BASIS_LABELS } from "@/lib/domain";
 import { hasActivity } from "@/lib/statement";
@@ -71,62 +84,87 @@ export default async function StatementsPage({ searchParams }: PageProps<"/state
             </>
           }
         >
-          <TableWrap>
-            <table className={tableClass}>
-              <thead>
-                <tr>
-                  <th className={thClass}>Owner</th>
-                  <th className={`${thClass} text-right`}>Bookings</th>
-                  <th className={`${thClass} text-right`}>Payouts</th>
-                  <th className={`${thClass} text-right`}>Your fees</th>
-                  <th className={`${thClass} text-right`}>Expenses</th>
-                  <th className={thClass}>Settlement</th>
-                  <th className={thClass}>Status</th>
-                  <th className={thClass}>
-                    <span className="sr-only">Actions</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {statements.map((s) => (
-                  <tr key={s.owner.id} className={hasActivity(s) ? "" : "text-slate-400"}>
-                    <td className={tdClass}>
-                      <Link href={`/statements/${s.owner.id}?month=${month}`} className="font-medium text-slate-900 hover:underline">
-                        {s.owner.name}
-                      </Link>
-                      <div className="text-xs text-slate-500">
-                        {s.properties.length} propert{s.properties.length === 1 ? "y" : "ies"}
-                      </div>
-                    </td>
-                    <td className={`${tdClass} tabular text-right`}>{s.totals.bookings}</td>
-                    <td className={`${tdClass} text-right`}>
-                      <Money cents={s.totals.payoutCents} currency={s.currency} />
-                    </td>
-                    <td className={`${tdClass} text-right`}>
-                      <Money cents={s.totals.cohostFeesCents} currency={s.currency} />
-                    </td>
-                    <td className={`${tdClass} text-right`}>
-                      <Money cents={s.totals.reimbursableExpensesCents + s.totals.ownerPaidExpensesCents} currency={s.currency} />
-                    </td>
-                    <td className={`${tdClass} whitespace-nowrap`}>
-                      <Balance cents={s.totals.balanceDueToOwnerCents} currency={s.currency} />
-                    </td>
-                    <td className={`${tdClass} whitespace-nowrap`}>
-                      <SendStatus statement={s} send={sends.get(s.owner.id)} />
-                    </td>
-                    <td className={`${tdClass} text-right whitespace-nowrap`}>
-                      <ButtonLink href={`/statements/${s.owner.id}?month=${month}`} variant="secondary" size="sm">
-                        View
-                      </ButtonLink>{" "}
-                      <a href={`/statements/${s.owner.id}/pdf?month=${month}`} className="text-xs font-medium text-brand-700 hover:underline">
-                        PDF
-                      </a>
-                    </td>
+          <ul className="divide-y divide-slate-100 sm:hidden">
+            {statements.map((s) => (
+              <li key={s.owner.id} className={`py-3 ${hasActivity(s) ? "" : "opacity-60"}`}>
+                <div className="flex items-center justify-between gap-3">
+                  <Link href={`/statements/${s.owner.id}?month=${month}`} className="min-w-0 truncate font-medium text-slate-900">
+                    {s.owner.name}
+                  </Link>
+                  <SendStatus statement={s} send={sends.get(s.owner.id)} />
+                </div>
+                <div className="mt-1 flex items-center justify-between gap-3 text-sm">
+                  <span className="text-slate-500">
+                    {s.totals.bookings} bookings · fees <Money cents={s.totals.cohostFeesCents} currency={s.currency} />
+                  </span>
+                </div>
+                <div className="mt-1 text-sm">
+                  <Balance cents={s.totals.balanceDueToOwnerCents} currency={s.currency} />
+                </div>
+              </li>
+            ))}
+          </ul>
+          <div className="hidden sm:block">
+            <TableWrap>
+              <table className={tableClass}>
+                <thead>
+                  <tr>
+                    <th className={thClass}>Owner</th>
+                    <th className={`${thClass} text-right`}>Bookings</th>
+                    <th className={`${thClass} text-right`}>Payouts</th>
+                    <th className={`${thClass} text-right`}>Your fees</th>
+                    <th className={`${thClass} text-right`}>Expenses</th>
+                    <th className={thClass}>Settlement</th>
+                    <th className={thClass}>Status</th>
+                    <th className={thClass}>
+                      <span className="sr-only">Actions</span>
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </TableWrap>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {statements.map((s) => (
+                    <tr key={s.owner.id} className={hasActivity(s) ? "" : "text-slate-400"}>
+                      <td className={tdClass}>
+                        <Link href={`/statements/${s.owner.id}?month=${month}`} className="font-medium text-slate-900 hover:underline">
+                          {s.owner.name}
+                        </Link>
+                        <div className="text-xs text-slate-500">
+                          {s.properties.length} propert{s.properties.length === 1 ? "y" : "ies"}
+                        </div>
+                      </td>
+                      <td className={`${tdClass} tabular text-right`}>{s.totals.bookings}</td>
+                      <td className={`${tdClass} text-right`}>
+                        <Money cents={s.totals.payoutCents} currency={s.currency} />
+                      </td>
+                      <td className={`${tdClass} text-right`}>
+                        <Money cents={s.totals.cohostFeesCents} currency={s.currency} />
+                      </td>
+                      <td className={`${tdClass} text-right`}>
+                        <Money cents={s.totals.reimbursableExpensesCents + s.totals.ownerPaidExpensesCents} currency={s.currency} />
+                      </td>
+                      <td className={`${tdClass} whitespace-nowrap`}>
+                        <Balance cents={s.totals.balanceDueToOwnerCents} currency={s.currency} />
+                      </td>
+                      <td className={`${tdClass} whitespace-nowrap`}>
+                        <SendStatus statement={s} send={sends.get(s.owner.id)} />
+                      </td>
+                      <td className={`${tdClass} text-right whitespace-nowrap`}>
+                        <ButtonLink href={`/statements/${s.owner.id}?month=${month}`} variant="secondary" size="sm">
+                          View
+                        </ButtonLink>{" "}
+                        <a
+                          href={`/statements/${s.owner.id}/pdf?month=${month}`}
+                          className="text-xs font-medium text-brand-700 hover:underline"
+                        >
+                          PDF
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </TableWrap>
+          </div>
           {pending.length > 0 ? (
             <div className="mt-4 border-t border-slate-100 pt-4">
               <ActionForm
@@ -134,7 +172,9 @@ export default async function StatementsPage({ searchParams }: PageProps<"/state
                 submitLabel={`Email ${pending.length} unsent statement${pending.length === 1 ? "" : "s"}`}
                 pendingLabel="Sending…"
               >
-                <p className="text-sm text-slate-600">Sends each owner with activity their PDF statement, skipping owners already sent this month.</p>
+                <p className="text-sm text-slate-600">
+                  Sends each owner with activity their PDF statement, skipping owners already sent this month.
+                </p>
               </ActionForm>
             </div>
           ) : null}

@@ -3,7 +3,20 @@ import Form from "next/form";
 import { ActionForm } from "@/components/action-form";
 import { ConfirmButton } from "@/components/confirm-button";
 import { MonthPicker } from "@/components/period-picker";
-import { Badge, ButtonLink, Card, EmptyState, Field, inputClass, Money, PageHeader, TableWrap, tableClass, tdClass, thClass } from "@/components/ui";
+import {
+  Badge,
+  ButtonLink,
+  Card,
+  EmptyState,
+  Field,
+  inputClass,
+  Money,
+  PageHeader,
+  TableWrap,
+  tableClass,
+  tdClass,
+  thClass,
+} from "@/components/ui";
 import { formatDate, monthPeriod, todayIso } from "@/lib/dates";
 import { MANUAL_CHANNELS } from "@/lib/domain";
 import { firstParam, monthParam } from "@/lib/search-params";
@@ -132,53 +145,77 @@ export default async function TransactionsPage({ searchParams }: PageProps<"/tra
             {rows.length === 0 ? (
               <p className="text-sm text-slate-500">Nothing in {period.label}.</p>
             ) : (
-              <TableWrap>
-                <table className={tableClass}>
-                  <thead>
-                    <tr>
-                      <th className={thClass}>Date</th>
-                      <th className={thClass}>Property</th>
-                      <th className={thClass}>Guest / item</th>
-                      <th className={thClass}>Channel</th>
-                      <th className={`${thClass} text-right`}>Payout</th>
-                      <th className={thClass}>
-                        <span className="sr-only">Actions</span>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    {rows.map((tx) => (
-                      <tr key={tx.id}>
-                        <td className={`${tdClass} whitespace-nowrap`}>
-                          {formatDate(displayDate(tx))}
-                          {tx.nights ? <div className="text-xs text-slate-500">{tx.nights} nights</div> : null}
-                        </td>
-                        <td className={tdClass}>{tx.propertyName}</td>
-                        <td className={tdClass}>
-                          <div className="text-slate-900">{tx.guest || tx.details || tx.type}</div>
-                          <div className="text-xs text-slate-500">
-                            {KIND_LABELS[tx.kind] ?? tx.type}
-                            {tx.confirmationCode ? ` · ${tx.confirmationCode}` : ""}
-                          </div>
-                        </td>
-                        <td className={tdClass}>
-                          {tx.source === "manual" ? <Badge tone="brand">{tx.channel}</Badge> : <Badge>{tx.channel}</Badge>}
-                        </td>
-                        <td className={`${tdClass} text-right`}>
-                          <Money cents={tx.amountCents} currency={tx.currency} />
-                        </td>
-                        <td className={`${tdClass} text-right`}>
-                          {tx.source === "manual" ? (
-                            <form action={deleteManualTransactionAction.bind(null, tx.id)}>
-                              <ConfirmButton label="Delete" confirmMessage="Delete this entry?" />
-                            </form>
-                          ) : null}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </TableWrap>
+              <>
+                <ul className="divide-y divide-slate-100 sm:hidden">
+                  {rows.map((tx) => (
+                    <li key={tx.id} className="flex items-start justify-between gap-3 py-3 text-sm">
+                      <div className="min-w-0">
+                        <div className="truncate font-medium text-slate-900">{tx.guest || tx.details || tx.type}</div>
+                        <div className="text-xs text-slate-500">
+                          {formatDate(displayDate(tx))} · {tx.propertyName} · {tx.channel}
+                        </div>
+                      </div>
+                      <div className="flex shrink-0 flex-col items-end gap-1">
+                        <Money cents={tx.amountCents} currency={tx.currency} className="font-medium" />
+                        {tx.source === "manual" ? (
+                          <form action={deleteManualTransactionAction.bind(null, tx.id)}>
+                            <ConfirmButton label="Delete" confirmMessage="Delete this entry?" />
+                          </form>
+                        ) : null}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+                <div className="hidden sm:block">
+                  <TableWrap>
+                    <table className={tableClass}>
+                      <thead>
+                        <tr>
+                          <th className={thClass}>Date</th>
+                          <th className={thClass}>Property</th>
+                          <th className={thClass}>Guest / item</th>
+                          <th className={thClass}>Channel</th>
+                          <th className={`${thClass} text-right`}>Payout</th>
+                          <th className={thClass}>
+                            <span className="sr-only">Actions</span>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100">
+                        {rows.map((tx) => (
+                          <tr key={tx.id}>
+                            <td className={`${tdClass} whitespace-nowrap`}>
+                              {formatDate(displayDate(tx))}
+                              {tx.nights ? <div className="text-xs text-slate-500">{tx.nights} nights</div> : null}
+                            </td>
+                            <td className={tdClass}>{tx.propertyName}</td>
+                            <td className={tdClass}>
+                              <div className="text-slate-900">{tx.guest || tx.details || tx.type}</div>
+                              <div className="text-xs text-slate-500">
+                                {KIND_LABELS[tx.kind] ?? tx.type}
+                                {tx.confirmationCode ? ` · ${tx.confirmationCode}` : ""}
+                              </div>
+                            </td>
+                            <td className={tdClass}>
+                              {tx.source === "manual" ? <Badge tone="brand">{tx.channel}</Badge> : <Badge>{tx.channel}</Badge>}
+                            </td>
+                            <td className={`${tdClass} text-right`}>
+                              <Money cents={tx.amountCents} currency={tx.currency} />
+                            </td>
+                            <td className={`${tdClass} text-right`}>
+                              {tx.source === "manual" ? (
+                                <form action={deleteManualTransactionAction.bind(null, tx.id)}>
+                                  <ConfirmButton label="Delete" confirmMessage="Delete this entry?" />
+                                </form>
+                              ) : null}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </TableWrap>
+                </div>
+              </>
             )}
           </Card>
         </div>
