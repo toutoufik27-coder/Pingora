@@ -15,8 +15,8 @@ export default async function SignupPage() {
 
   return (
     <>
-      <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Start your {TRIAL_DAYS}-day free trial</h1>
-      <p className="mt-1 text-sm text-slate-600">
+      <h1 className="text-2xl font-semibold tracking-tight text-ink-900">Start your {TRIAL_DAYS}-day free trial</h1>
+      <p className="mt-1 text-sm text-ink-600">
         No credit card needed. Already have an account?{" "}
         <Link href="/login" className="font-medium text-brand-700 hover:underline">
           Log in
@@ -43,7 +43,7 @@ export default async function SignupPage() {
             className={inputClass}
           />
         </Field>
-        <label className="flex items-start gap-2 text-sm text-slate-600">
+        <label className="flex items-start gap-2 text-sm text-ink-600">
           <input type="checkbox" name="terms" required className="mt-0.5 size-4 accent-brand-600" />
           <span>
             I agree to the{" "}

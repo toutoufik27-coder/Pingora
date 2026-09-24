@@ -26,14 +26,14 @@ export default async function OwnerPortalPage({ params, searchParams }: PageProp
 
   const shell = (children: ReactNode) => (
     <div className="min-h-screen">
-      <header className="border-b border-slate-200 bg-white">
+      <header className="border-b border-ink-200 bg-white">
         <div className="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-5 md:px-10">
-          <div className="text-sm text-slate-500">Owner statements from</div>
-          <div className="text-xl font-semibold text-slate-900">{workspace.name}</div>
+          <div className="text-sm text-ink-500">Owner statements from</div>
+          <div className="text-xl font-semibold text-ink-900">{workspace.name}</div>
         </div>
       </header>
       <main className="mx-auto max-w-6xl px-4 py-6 md:px-10 md:py-8">{children}</main>
-      <footer className="px-4 pb-8 text-center text-xs text-slate-400">Powered by {APP_NAME}</footer>
+      <footer className="px-4 pb-8 text-center text-xs text-ink-400">Powered by {APP_NAME}</footer>
     </div>
   );
 
@@ -56,7 +56,7 @@ export default async function OwnerPortalPage({ params, searchParams }: PageProp
     <>
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
+          <h1 className="text-2xl font-semibold tracking-tight text-ink-900">
             {owner.name} · {statement.period.label}
           </h1>
           <nav aria-label="Statement months" className="mt-3 flex flex-wrap gap-2">
@@ -65,7 +65,7 @@ export default async function OwnerPortalPage({ params, searchParams }: PageProp
                 key={p}
                 href={`/o/${token}?month=${p}`}
                 aria-current={p === month ? "page" : undefined}
-                className={`rounded-full px-3 py-1 text-sm ${p === month ? "bg-brand-600 text-white" : "bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50"}`}
+                className={`rounded-full px-3 py-1 text-sm ${p === month ? "bg-brand-600 text-white" : "bg-white text-ink-700 ring-1 ring-ink-200 hover:bg-ink-50"}`}
               >
                 {monthPeriod(p).label}
               </Link>

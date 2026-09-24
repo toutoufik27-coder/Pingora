@@ -9,7 +9,11 @@ export function MonthPicker({ month, basePath }: { month: string; basePath: stri
   const next = shiftMonth(month, 1);
   return (
     <div className="flex items-center gap-2">
-      <Link href={`${basePath}?month=${previous}`} className={buttonClass("secondary", "sm")} aria-label={`Previous month (${monthPeriod(previous).label})`}>
+      <Link
+        href={`${basePath}?month=${previous}`}
+        className={buttonClass("secondary", "sm")}
+        aria-label={`Previous month (${monthPeriod(previous).label})`}
+      >
         ←
       </Link>
       <Form action={basePath} className="flex items-center gap-2">
@@ -21,7 +25,11 @@ export function MonthPicker({ month, basePath }: { month: string; basePath: stri
           Show
         </button>
       </Form>
-      <Link href={`${basePath}?month=${next}`} className={buttonClass("secondary", "sm")} aria-label={`Next month (${monthPeriod(next).label})`}>
+      <Link
+        href={`${basePath}?month=${next}`}
+        className={buttonClass("secondary", "sm")}
+        aria-label={`Next month (${monthPeriod(next).label})`}
+      >
         →
       </Link>
     </div>
@@ -34,7 +42,7 @@ export function YearPicker({ year, basePath }: { year: number; basePath: string 
       <Link href={`${basePath}?year=${year - 1}`} className={buttonClass("secondary", "sm")} aria-label={`Year ${year - 1}`}>
         ← {year - 1}
       </Link>
-      <span className="px-2 text-sm font-semibold text-slate-900">{year}</span>
+      <span className="px-2 text-sm font-semibold text-ink-900">{year}</span>
       <Link href={`${basePath}?year=${year + 1}`} className={buttonClass("secondary", "sm")} aria-label={`Year ${year + 1}`}>
         {year + 1} →
       </Link>

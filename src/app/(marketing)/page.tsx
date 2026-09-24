@@ -71,8 +71,8 @@ function SectionHeading({ eyebrow, title, body }: { eyebrow: string; title: stri
   return (
     <div className="mx-auto max-w-2xl text-center">
       <p className="text-sm font-semibold tracking-wide text-brand-700 uppercase">{eyebrow}</p>
-      <h2 className="mt-2 text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">{title}</h2>
-      {body ? <p className="mt-4 text-lg text-slate-600">{body}</p> : null}
+      <h2 className="mt-2 text-3xl font-bold tracking-tight text-ink-900 md:text-4xl">{title}</h2>
+      {body ? <p className="mt-4 text-lg text-ink-600">{body}</p> : null}
     </div>
   );
 }
@@ -90,18 +90,18 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
 
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div aria-hidden className="absolute inset-0 -z-10 bg-[radial-gradient(60rem_30rem_at_70%_-10%,#d7f2ea,transparent)]" />
+        <div aria-hidden className="absolute inset-0 -z-10 bg-[radial-gradient(60rem_30rem_at_70%_-10%,#dcece5,transparent)]" />
         <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 pt-16 pb-20 md:px-8 lg:grid-cols-[1fr_1.1fr] lg:pt-24">
           <div>
             <p className="inline-flex items-center gap-2 rounded-full border border-brand-100 bg-white px-3 py-1 text-xs font-medium text-brand-700">
               For Airbnb co-hosts & small property managers
             </p>
-            <h1 className="mt-5 text-4xl font-bold tracking-tight text-slate-900 md:text-6xl">Owner statements in minutes, not evenings.</h1>
-            <p className="mt-6 text-lg text-slate-600">
+            <h1 className="mt-5 text-4xl font-bold tracking-tight text-ink-900 md:text-6xl">Owner statements in minutes, not evenings.</h1>
+            <p className="mt-6 text-lg text-ink-600">
               {APP_NAME} turns your Airbnb export into a clear monthly statement for every owner: bookings, your commission, expenses and
               exactly who owes whom.
             </p>
-            <ul className="mt-6 space-y-2 text-slate-700">
+            <ul className="mt-6 space-y-2 text-ink-700">
               {HERO_POINTS.map((point) => (
                 <li key={point} className="flex items-center gap-2">
                   <Icon name="check" className="size-5 text-brand-600" />
@@ -117,13 +117,13 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
                 See how it works
               </Link>
             </div>
-            <p className="mt-3 text-sm text-slate-500">No credit card required · ${PRICE_MONTHLY_USD}/month after · unlimited properties</p>
+            <p className="mt-3 text-sm text-ink-500">No credit card required · ${PRICE_MONTHLY_USD}/month after · unlimited properties</p>
           </div>
-          <div className="rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl shadow-brand-800/10">
+          <div className="rounded-2xl border border-ink-200 bg-white p-2 shadow-2xl shadow-brand-800/10">
             <div className="flex items-center gap-1.5 px-2 pt-1 pb-2" aria-hidden>
-              <span className="size-2.5 rounded-full bg-slate-200" />
-              <span className="size-2.5 rounded-full bg-slate-200" />
-              <span className="size-2.5 rounded-full bg-slate-200" />
+              <span className="size-2.5 rounded-full bg-ink-200" />
+              <span className="size-2.5 rounded-full bg-ink-200" />
+              <span className="size-2.5 rounded-full bg-ink-200" />
             </div>
             <Image
               src="/marketing/statement.png"
@@ -131,21 +131,21 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
               width={1280}
               height={960}
               priority
-              className="h-auto w-full rounded-lg border border-slate-100"
+              className="h-auto w-full rounded-lg border border-ink-100"
             />
           </div>
         </div>
       </section>
 
       {/* Problem */}
-      <section className="border-y border-slate-100 bg-slate-50">
+      <section className="border-y border-ink-100 bg-ink-50">
         <div className="mx-auto max-w-6xl px-4 py-20 md:px-8">
           <SectionHeading eyebrow="The month-end problem" title="Still doing owner payouts in a spreadsheet?" />
           <div className="mt-12 grid gap-5 md:grid-cols-3">
             {PAINS.map((pain) => (
-              <div key={pain.title} className="rounded-2xl border border-slate-200 bg-white p-6">
-                <h3 className="font-semibold text-slate-900">{pain.title}</h3>
-                <p className="mt-2 text-slate-600">{pain.body}</p>
+              <div key={pain.title} className="rounded-2xl border border-ink-200 bg-white p-6">
+                <h3 className="font-semibold text-ink-900">{pain.title}</h3>
+                <p className="mt-2 text-ink-600">{pain.body}</p>
               </div>
             ))}
           </div>
@@ -157,32 +157,32 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
         <SectionHeading eyebrow="How it works" title="From Airbnb export to sent statements" body="Set up once, then each month takes a few minutes." />
         <ol className="mt-12 grid gap-8 md:grid-cols-3">
           {STEPS.map((step, i) => (
-            <li key={step.title} className="relative rounded-2xl border border-slate-200 p-6">
+            <li key={step.title} className="relative rounded-2xl border border-ink-200 p-6">
               <div className="flex items-center gap-3">
                 <span className="grid size-10 place-items-center rounded-xl bg-brand-50 text-brand-700">
                   <Icon name={step.icon} />
                 </span>
-                <span className="text-sm font-semibold text-slate-400">Step {i + 1}</span>
+                <span className="text-sm font-semibold text-ink-400">Step {i + 1}</span>
               </div>
-              <h3 className="mt-5 text-lg font-semibold text-slate-900">{step.title}</h3>
-              <p className="mt-2 text-slate-600">{step.body}</p>
+              <h3 className="mt-5 text-lg font-semibold text-ink-900">{step.title}</h3>
+              <p className="mt-2 text-ink-600">{step.body}</p>
             </li>
           ))}
         </ol>
       </section>
 
       {/* Features */}
-      <section id="features" className="scroll-mt-20 border-y border-slate-100 bg-slate-50">
+      <section id="features" className="scroll-mt-20 border-y border-ink-100 bg-ink-50">
         <div className="mx-auto max-w-6xl px-4 py-20 md:px-8">
           <SectionHeading eyebrow="Features" title="Everything a co-host needs at month end" />
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {FEATURES.map((f) => (
-              <div key={f.title} className="rounded-2xl border border-slate-200 bg-white p-6">
+              <div key={f.title} className="rounded-2xl border border-ink-200 bg-white p-6">
                 <span className="grid size-10 place-items-center rounded-xl bg-brand-50 text-brand-700">
                   <Icon name={f.icon} />
                 </span>
-                <h3 className="mt-4 font-semibold text-slate-900">{f.title}</h3>
-                <p className="mt-2 text-sm text-slate-600">{f.body}</p>
+                <h3 className="mt-4 font-semibold text-ink-900">{f.title}</h3>
+                <p className="mt-2 text-sm text-ink-600">{f.body}</p>
               </div>
             ))}
           </div>
@@ -192,9 +192,9 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
       {/* Comparison */}
       <section className="mx-auto max-w-5xl px-4 py-20 md:px-8">
         <SectionHeading eyebrow="Why switch" title="Spreadsheet vs. CoHost Ledger" />
-        <div className="mt-12 overflow-x-auto rounded-2xl border border-slate-200">
+        <div className="mt-12 overflow-x-auto rounded-2xl border border-ink-200">
           <table className="w-full min-w-[36rem] text-left text-sm">
-            <thead className="bg-slate-50 text-slate-500">
+            <thead className="bg-ink-50 text-ink-500">
               <tr>
                 <th scope="col" className="px-5 py-3 font-semibold">
                   Task
@@ -207,14 +207,14 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-ink-100">
               {COMPARISON.map(([task, before, after]) => (
                 <tr key={task}>
-                  <th scope="row" className="px-5 py-4 font-medium text-slate-900">
+                  <th scope="row" className="px-5 py-4 font-medium text-ink-900">
                     {task}
                   </th>
-                  <td className="px-5 py-4 text-slate-500">{before}</td>
-                  <td className="px-5 py-4 text-slate-900">
+                  <td className="px-5 py-4 text-ink-500">{before}</td>
+                  <td className="px-5 py-4 text-ink-900">
                     <span className="inline-flex items-center gap-2">
                       <Icon name="check" className="size-4 shrink-0 text-brand-600" />
                       {after}
@@ -248,19 +248,19 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="scroll-mt-20 border-t border-slate-100 bg-slate-50">
+      <section id="faq" className="scroll-mt-20 border-t border-ink-100 bg-ink-50">
         <div className="mx-auto max-w-3xl px-4 py-20 md:px-8">
           <SectionHeading eyebrow="FAQ" title="Questions" />
-          <div className="mt-10 divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white">
+          <div className="mt-10 divide-y divide-ink-200 rounded-2xl border border-ink-200 bg-white">
             {FAQ.map((item) => (
               <details key={item.q} className="group px-6 py-5">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-medium text-slate-900 [&::-webkit-details-marker]:hidden">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-medium text-ink-900 [&::-webkit-details-marker]:hidden">
                   {item.q}
                   <span aria-hidden className="text-xl leading-none text-brand-600 transition-transform group-open:rotate-45">
                     +
                   </span>
                 </summary>
-                <p className="mt-3 text-slate-600">{item.a}</p>
+                <p className="mt-3 text-ink-600">{item.a}</p>
               </details>
             ))}
           </div>

@@ -32,7 +32,7 @@ export default async function OwnersPage() {
 
         <Card title="Your owners" className="lg:col-span-2">
           {owners.length === 0 ? (
-            <p className="text-sm text-slate-500">No owners yet. Add the first one to start preparing statements.</p>
+            <p className="text-sm text-ink-500">No owners yet. Add the first one to start preparing statements.</p>
           ) : (
             <TableWrap>
               <table className={tableClass}>
@@ -46,11 +46,11 @@ export default async function OwnersPage() {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-ink-100">
                   {owners.map((owner) => (
                     <tr key={owner.id}>
                       <td className={tdClass}>
-                        <Link href={`/owners/${owner.id}`} className="font-medium text-slate-900 hover:underline">
+                        <Link href={`/owners/${owner.id}`} className="font-medium text-ink-900 hover:underline">
                           {owner.name}
                         </Link>
                       </td>

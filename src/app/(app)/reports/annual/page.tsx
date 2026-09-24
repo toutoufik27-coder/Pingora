@@ -45,11 +45,11 @@ export default async function AnnualSummaryPage({ searchParams }: PageProps<"/re
                     <th className={`${thClass} text-right`}>Owner net income</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-ink-100">
                   {statements.map((s) => (
                     <tr key={s.owner.id}>
                       <td className={tdClass}>
-                        <Link href={`/owners/${s.owner.id}`} className="font-medium text-slate-900 hover:underline">
+                        <Link href={`/owners/${s.owner.id}`} className="font-medium text-ink-900 hover:underline">
                           {s.owner.name}
                         </Link>
                         {s.totals.cohostFeesCents >= threshold ? (
@@ -77,7 +77,7 @@ export default async function AnnualSummaryPage({ searchParams }: PageProps<"/re
                     </tr>
                   ))}
                 </tbody>
-                <tfoot className="border-t-2 border-slate-200 font-semibold text-slate-900">
+                <tfoot className="border-t-2 border-ink-200 font-semibold text-ink-900">
                   <tr>
                     <td className={tdClass}>All owners</td>
                     <td className={`${tdClass} tabular text-right`}>{all.bookings}</td>

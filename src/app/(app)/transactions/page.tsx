@@ -143,15 +143,15 @@ export default async function TransactionsPage({ searchParams }: PageProps<"/tra
             className="lg:col-span-2"
           >
             {rows.length === 0 ? (
-              <p className="text-sm text-slate-500">Nothing in {period.label}.</p>
+              <p className="text-sm text-ink-500">Nothing in {period.label}.</p>
             ) : (
               <>
-                <ul className="divide-y divide-slate-100 sm:hidden">
+                <ul className="divide-y divide-ink-100 sm:hidden">
                   {rows.map((tx) => (
                     <li key={tx.id} className="flex items-start justify-between gap-3 py-3 text-sm">
                       <div className="min-w-0">
-                        <div className="truncate font-medium text-slate-900">{tx.guest || tx.details || tx.type}</div>
-                        <div className="text-xs text-slate-500">
+                        <div className="truncate font-medium text-ink-900">{tx.guest || tx.details || tx.type}</div>
+                        <div className="text-xs text-ink-500">
                           {formatDate(displayDate(tx))} · {tx.propertyName} · {tx.channel}
                         </div>
                       </div>
@@ -181,17 +181,17 @@ export default async function TransactionsPage({ searchParams }: PageProps<"/tra
                           </th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-100">
+                      <tbody className="divide-y divide-ink-100">
                         {rows.map((tx) => (
                           <tr key={tx.id}>
                             <td className={`${tdClass} whitespace-nowrap`}>
                               {formatDate(displayDate(tx))}
-                              {tx.nights ? <div className="text-xs text-slate-500">{tx.nights} nights</div> : null}
+                              {tx.nights ? <div className="text-xs text-ink-500">{tx.nights} nights</div> : null}
                             </td>
                             <td className={tdClass}>{tx.propertyName}</td>
                             <td className={tdClass}>
-                              <div className="text-slate-900">{tx.guest || tx.details || tx.type}</div>
-                              <div className="text-xs text-slate-500">
+                              <div className="text-ink-900">{tx.guest || tx.details || tx.type}</div>
+                              <div className="text-xs text-ink-500">
                                 {KIND_LABELS[tx.kind] ?? tx.type}
                                 {tx.confirmationCode ? ` · ${tx.confirmationCode}` : ""}
                               </div>

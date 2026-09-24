@@ -23,11 +23,11 @@ const MARGIN = 40;
 const CONTENT_WIDTH = PAGE_WIDTH - 2 * MARGIN;
 const FOOTER_SPACE = 36;
 
-const INK = rgb(0.1, 0.12, 0.16);
-const MUTED = rgb(0.42, 0.45, 0.5);
-const RULE = rgb(0.85, 0.87, 0.9);
-const HEADER_FILL = rgb(0.95, 0.96, 0.97);
-const ACCENT = rgb(0.05, 0.4, 0.35);
+const INK = rgb(0.165, 0.153, 0.141);
+const MUTED = rgb(0.443, 0.42, 0.384);
+const RULE = rgb(0.906, 0.886, 0.851);
+const HEADER_FILL = rgb(0.953, 0.941, 0.918);
+const ACCENT = rgb(0.184, 0.42, 0.369);
 
 interface Column {
   header: string;
@@ -261,7 +261,7 @@ export async function renderStatementPdf(statement: OwnerStatement, options: Sta
   if (statement.currencies.length > 1) {
     layout.text(`Warning: lines are in several currencies (${statement.currencies.join(", ")}); totals mix them.`, MARGIN, layout.y - 8, {
       size: 8,
-      color: rgb(0.7, 0.2, 0.1),
+      color: rgb(0.608, 0.302, 0.247),
     });
     layout.y -= 14;
   }

@@ -68,12 +68,12 @@ export default async function DashboardPage() {
                 <div className="flex items-center gap-3">
                   <span
                     className={`grid size-7 shrink-0 place-items-center rounded-full text-xs font-semibold ${
-                      step.done ? "bg-brand-600 text-white" : "bg-slate-100 text-slate-600"
+                      step.done ? "bg-brand-600 text-white" : "bg-ink-100 text-ink-600"
                     }`}
                   >
                     {step.done ? "✓" : i + 1}
                   </span>
-                  <span className={step.done ? "text-slate-500 line-through" : "text-slate-900"}>{step.title}</span>
+                  <span className={step.done ? "text-ink-500 line-through" : "text-ink-900"}>{step.title}</span>
                 </div>
                 {!step.done ? (
                   <ButtonLink href={step.href} variant="secondary" size="sm">
@@ -112,15 +112,15 @@ export default async function DashboardPage() {
       <div className="grid gap-6 lg:grid-cols-2">
         <Card title="Owners" actions={<ButtonLink href="/owners" variant="secondary" size="sm">Manage</ButtonLink>}>
           {active.length === 0 ? (
-            <p className="text-sm text-slate-500">No owner activity in {period.label} yet.</p>
+            <p className="text-sm text-ink-500">No owner activity in {period.label} yet.</p>
           ) : (
-            <ul className="divide-y divide-slate-100">
+            <ul className="divide-y divide-ink-100">
               {active.map((s) => (
                 <li key={s.owner.id} className="flex items-center justify-between gap-3 py-2 text-sm">
-                  <Link href={`/statements/${s.owner.id}?month=${month}`} className="font-medium text-slate-900 hover:underline">
+                  <Link href={`/statements/${s.owner.id}?month=${month}`} className="font-medium text-ink-900 hover:underline">
                     {s.owner.name}
                   </Link>
-                  <span className="tabular text-slate-600">
+                  <span className="tabular text-ink-600">
                     {s.totals.bookings} bookings · fees {formatMoney(s.totals.cohostFeesCents, s.currency)}
                   </span>
                 </li>
@@ -131,13 +131,13 @@ export default async function DashboardPage() {
 
         <Card title="Recent imports" actions={<ButtonLink href="/import" variant="secondary" size="sm">Import</ButtonLink>}>
           {imports.length === 0 ? (
-            <p className="text-sm text-slate-500">Nothing imported yet.</p>
+            <p className="text-sm text-ink-500">Nothing imported yet.</p>
           ) : (
-            <ul className="divide-y divide-slate-100">
+            <ul className="divide-y divide-ink-100">
               {imports.slice(0, 5).map((record) => (
                 <li key={record.id} className="flex items-center justify-between gap-3 py-2 text-sm">
-                  <span className="truncate text-slate-900">{record.fileName}</span>
-                  <span className="shrink-0 text-slate-500">
+                  <span className="truncate text-ink-900">{record.fileName}</span>
+                  <span className="shrink-0 text-ink-500">
                     {record.insertedCount} new · {formatDate(record.createdAt.toISOString().slice(0, 10))}
                   </span>
                 </li>

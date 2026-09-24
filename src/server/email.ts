@@ -97,7 +97,7 @@ export function escapeHtml(value: string): string {
 export function emailHtml(paragraphs: string[], action?: { label: string; url: string }): string {
   const body = paragraphs.map((p) => `<p style="margin:0 0 16px">${escapeHtml(p).replace(/\n/g, "<br>")}</p>`).join("");
   const button = action
-    ? `<p style="margin:24px 0"><a href="${escapeHtml(action.url)}" style="background:#0f766e;color:#ffffff;padding:10px 18px;border-radius:6px;text-decoration:none;font-weight:600">${escapeHtml(action.label)}</a></p>`
+    ? `<p style="margin:24px 0"><a href="${escapeHtml(action.url)}" style="background:#2f6b5e;color:#ffffff;padding:10px 18px;border-radius:6px;text-decoration:none;font-weight:600">${escapeHtml(action.label)}</a></p>`
     : "";
-  return `<!doctype html><html><body style="margin:0;background:#f8fafc;padding:24px;font-family:Arial,Helvetica,sans-serif;color:#0f172a;font-size:15px;line-height:1.5"><div style="max-width:560px;margin:0 auto;background:#ffffff;border:1px solid #e2e8f0;border-radius:10px;padding:28px">${body}${button}</div></body></html>`;
+  return `<!doctype html><html><body style="margin:0;background:#faf8f4;padding:24px;font-family:Arial,Helvetica,sans-serif;color:#2a2724;font-size:15px;line-height:1.5"><div style="max-width:560px;margin:0 auto;background:#ffffff;border:1px solid #e7e2d9;border-radius:10px;padding:28px">${body}${button}</div></body></html>`;
 }

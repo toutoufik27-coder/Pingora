@@ -23,7 +23,7 @@ function describeLine(line: StatementLine): string {
 }
 
 export function SettlementText({ cents, currency, viewer }: { cents: number; currency?: string; viewer: StatementViewer }) {
-  if (cents === 0) return <span className="tabular text-slate-500">Settled · {formatMoney(0, currency)}</span>;
+  if (cents === 0) return <span className="tabular text-ink-500">Settled · {formatMoney(0, currency)}</span>;
   const toOwner = cents > 0;
   const label = viewer === "cohost" ? (toOwner ? "Pay owner " : "Owner pays you ") : toOwner ? "Due to you " : "You owe your co-host ";
   return (
@@ -71,7 +71,7 @@ export function StatementView({ statement, viewer }: { statement: OwnerStatement
 
       <Card className="mb-6">
         <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-          <span className="text-sm text-slate-600">Settlement for {statement.period.label}</span>
+          <span className="text-sm text-ink-600">Settlement for {statement.period.label}</span>
           <span className="text-lg">
             <SettlementText cents={totals.balanceDueToOwnerCents} currency={currency} viewer={viewer} />
           </span>
@@ -119,18 +119,18 @@ function PropertySection({ section, currency, viewer }: { section: PropertyState
       description={`${describeRule(property.rule)} · ${(viewer === "cohost" ? PAYOUT_FLOW_LABELS : PAYOUT_FLOW_OWNER_LABELS)[property.payoutFlow]}`}
     >
       {section.lines.length === 0 ? (
-        <p className="text-sm text-slate-500">No bookings in this period.</p>
+        <p className="text-sm text-ink-500">No bookings in this period.</p>
       ) : (
         <>
           {/* Phones: one compact card per line instead of an eight-column table. */}
-          <ul className="-mx-1 divide-y divide-slate-100 sm:hidden">
+          <ul className="-mx-1 divide-y divide-ink-100 sm:hidden">
             {section.lines.map((line) => (
               <li key={line.transaction.id} className="px-1 py-3 text-sm">
                 <div className="flex items-baseline justify-between gap-3">
-                  <span className="min-w-0 truncate font-medium text-slate-900">{describeLine(line)}</span>
-                  <Money cents={line.transaction.amountCents} currency={currency} className="shrink-0 font-medium text-slate-900" />
+                  <span className="min-w-0 truncate font-medium text-ink-900">{describeLine(line)}</span>
+                  <Money cents={line.transaction.amountCents} currency={currency} className="shrink-0 font-medium text-ink-900" />
                 </div>
-                <div className="mt-1 flex items-baseline justify-between gap-3 text-xs text-slate-500">
+                <div className="mt-1 flex items-baseline justify-between gap-3 text-xs text-ink-500">
                   <span>
                     {formatDate(line.attributionDate)}
                     {line.transaction.nights ? ` · ${line.transaction.nights} nights` : ""}
@@ -142,7 +142,7 @@ function PropertySection({ section, currency, viewer }: { section: PropertyState
                 </div>
               </li>
             ))}
-            <li className="flex items-baseline justify-between gap-3 px-1 pt-3 text-sm font-semibold text-slate-900">
+            <li className="flex items-baseline justify-between gap-3 px-1 pt-3 text-sm font-semibold text-ink-900">
               <span>
                 {totals.bookings} booking{totals.bookings === 1 ? "" : "s"} · {totals.nights} nights
               </span>
@@ -164,7 +164,7 @@ function PropertySection({ section, currency, viewer }: { section: PropertyState
                     <th className={`${thClass} text-right`}>{viewer === "cohost" ? "Your fee" : "Co-host fee"}</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-ink-100">
                   {section.lines.map((line) => (
                     <tr key={line.transaction.id}>
                       <td className={`${tdClass} whitespace-nowrap`}>{formatDate(line.attributionDate)}</td>
@@ -186,7 +186,7 @@ function PropertySection({ section, currency, viewer }: { section: PropertyState
                     </tr>
                   ))}
                 </tbody>
-                <tfoot className="border-t-2 border-slate-200 font-semibold text-slate-900">
+                <tfoot className="border-t-2 border-ink-200 font-semibold text-ink-900">
                   <tr>
                     <td className={tdClass} colSpan={2}>
                       Total · {totals.bookings} booking
@@ -216,14 +216,14 @@ function PropertySection({ section, currency, viewer }: { section: PropertyState
 
       {section.expenses.length > 0 ? (
         <div className="mt-5">
-          <h3 className="mb-2 text-sm font-semibold text-slate-900">Expenses</h3>
-          <ul className="divide-y divide-slate-100 text-sm">
+          <h3 className="mb-2 text-sm font-semibold text-ink-900">Expenses</h3>
+          <ul className="divide-y divide-ink-100 text-sm">
             {section.expenses.map((e) => (
               <li key={e.id} className="flex items-center justify-between gap-3 py-1.5">
                 <span>
                   {formatDate(e.date)} · {e.category}
                   {e.description ? ` · ${e.description}` : ""}{" "}
-                  <span className="text-slate-500">
+                  <span className="text-ink-500">
                     (
                     {e.paidBy === "cohost"
                       ? viewer === "cohost"
@@ -242,7 +242,7 @@ function PropertySection({ section, currency, viewer }: { section: PropertyState
         </div>
       ) : null}
 
-      <dl className="mt-5 grid gap-1 border-t border-slate-100 pt-4 text-sm sm:ml-auto sm:max-w-sm">
+      <dl className="mt-5 grid gap-1 border-t border-ink-100 pt-4 text-sm sm:ml-auto sm:max-w-sm">
         {totals.monthlyFeesCents !== 0 ? (
           <Row label="Monthly management fee">
             <Money cents={totals.monthlyFeesCents} currency={currency} />
@@ -265,7 +265,7 @@ function PropertySection({ section, currency, viewer }: { section: PropertyState
 function Row({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div className="flex items-center justify-between gap-4">
-      <dt className="text-slate-600">{label}</dt>
+      <dt className="text-ink-600">{label}</dt>
       <dd>{children}</dd>
     </div>
   );

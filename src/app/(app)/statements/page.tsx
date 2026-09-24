@@ -80,21 +80,21 @@ export default async function StatementsPage({ searchParams }: PageProps<"/state
           title={`${statements.filter(hasActivity).length} of ${statements.length} owners with activity`}
           description={
             <>
-              Your fees this month: <Money cents={totalFees} className="font-semibold text-slate-900" />
+              Your fees this month: <Money cents={totalFees} className="font-semibold text-ink-900" />
             </>
           }
         >
-          <ul className="divide-y divide-slate-100 sm:hidden">
+          <ul className="divide-y divide-ink-100 sm:hidden">
             {statements.map((s) => (
               <li key={s.owner.id} className={`py-3 ${hasActivity(s) ? "" : "opacity-60"}`}>
                 <div className="flex items-center justify-between gap-3">
-                  <Link href={`/statements/${s.owner.id}?month=${month}`} className="min-w-0 truncate font-medium text-slate-900">
+                  <Link href={`/statements/${s.owner.id}?month=${month}`} className="min-w-0 truncate font-medium text-ink-900">
                     {s.owner.name}
                   </Link>
                   <SendStatus statement={s} send={sends.get(s.owner.id)} />
                 </div>
                 <div className="mt-1 flex items-center justify-between gap-3 text-sm">
-                  <span className="text-slate-500">
+                  <span className="text-ink-500">
                     {s.totals.bookings} bookings · fees <Money cents={s.totals.cohostFeesCents} currency={s.currency} />
                   </span>
                 </div>
@@ -121,14 +121,14 @@ export default async function StatementsPage({ searchParams }: PageProps<"/state
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-ink-100">
                   {statements.map((s) => (
-                    <tr key={s.owner.id} className={hasActivity(s) ? "" : "text-slate-400"}>
+                    <tr key={s.owner.id} className={hasActivity(s) ? "" : "text-ink-400"}>
                       <td className={tdClass}>
-                        <Link href={`/statements/${s.owner.id}?month=${month}`} className="font-medium text-slate-900 hover:underline">
+                        <Link href={`/statements/${s.owner.id}?month=${month}`} className="font-medium text-ink-900 hover:underline">
                           {s.owner.name}
                         </Link>
-                        <div className="text-xs text-slate-500">
+                        <div className="text-xs text-ink-500">
                           {s.properties.length} propert{s.properties.length === 1 ? "y" : "ies"}
                         </div>
                       </td>
@@ -166,13 +166,13 @@ export default async function StatementsPage({ searchParams }: PageProps<"/state
             </TableWrap>
           </div>
           {pending.length > 0 ? (
-            <div className="mt-4 border-t border-slate-100 pt-4">
+            <div className="mt-4 border-t border-ink-100 pt-4">
               <ActionForm
                 action={emailAllStatementsAction.bind(null, month)}
                 submitLabel={`Email ${pending.length} unsent statement${pending.length === 1 ? "" : "s"}`}
                 pendingLabel="Sending…"
               >
-                <p className="text-sm text-slate-600">
+                <p className="text-sm text-ink-600">
                   Sends each owner with activity their PDF statement, skipping owners already sent this month.
                 </p>
               </ActionForm>

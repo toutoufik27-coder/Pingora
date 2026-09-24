@@ -17,7 +17,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
       <div className="flex flex-col px-4 py-8 sm:px-8">
         <Logo />
         <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center py-10">{children}</div>
-        <p className="text-center text-xs text-slate-500">
+        <p className="text-center text-xs text-ink-500">
           <Link href="/terms" className="hover:underline">
             Terms
           </Link>{" "}

@@ -60,10 +60,10 @@ export default async function BillingPage({ searchParams }: PageProps<"/billing"
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-lg font-semibold text-slate-900">CoHost Ledger Pro</span>
+                <span className="text-lg font-semibold text-ink-900">CoHost Ledger Pro</span>
                 <Badge tone={access ? "brand" : "danger"}>{describeBilling(workspace, now)}</Badge>
               </div>
-              <p className="mt-1 text-sm text-slate-600">
+              <p className="mt-1 text-sm text-ink-600">
                 {workspace.subscriptionStatus === "trialing" && workspace.trialEndsAt
                   ? `Trial ends ${formatDate(workspace.trialEndsAt.toISOString().slice(0, 10))}.`
                   : workspace.currentPeriodEndsAt
@@ -86,7 +86,7 @@ export default async function BillingPage({ searchParams }: PageProps<"/billing"
               ) : null}
             </div>
           </div>
-          <ul className="mt-5 grid gap-2 text-sm text-slate-700 sm:grid-cols-2">
+          <ul className="mt-5 grid gap-2 text-sm text-ink-700 sm:grid-cols-2">
             {FEATURES.map((f) => (
               <li key={f} className="flex items-start gap-2">
                 <span aria-hidden className="text-brand-600">
@@ -98,7 +98,7 @@ export default async function BillingPage({ searchParams }: PageProps<"/billing"
           </ul>
         </Card>
 
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-ink-500">
           Payments are processed by Lemon Squeezy, our merchant of record, which also handles sales tax and sends your invoices. Questions?{" "}
           {SUPPORT_EMAIL}
         </p>

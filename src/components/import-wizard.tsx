@@ -106,10 +106,14 @@ export function ImportWizard({ offerSample }: { offerSample: boolean }) {
             Try the sample file
           </button>
         ) : null}
-        {pending ? <span className="text-sm text-slate-500">Working…</span> : null}
+        {pending ? <span className="text-sm text-ink-500">Working…</span> : null}
       </div>
 
-      {error ? <Alert tone="danger" title="This file can't be imported">{error}</Alert> : null}
+      {error ? (
+        <Alert tone="danger" title="This file can't be imported">
+          {error}
+        </Alert>
+      ) : null}
 
       {result ? (
         <Alert tone="info" title="Import complete">
@@ -117,7 +121,10 @@ export function ImportWizard({ offerSample }: { offerSample: boolean }) {
             Added {result.insertedCount} transaction{result.insertedCount === 1 ? "" : "s"}
             {result.duplicateCount > 0 ? `, skipped ${result.duplicateCount} already imported` : ""}
             {result.skippedCount > 0 ? `, ignored ${result.skippedCount} payout and tax lines` : ""}
-            {result.createdProperties > 0 ? `, and created ${result.createdProperties} new propert${result.createdProperties === 1 ? "y" : "ies"}` : ""}.
+            {result.createdProperties > 0
+              ? `, and created ${result.createdProperties} new propert${result.createdProperties === 1 ? "y" : "ies"}`
+              : ""}
+            .
           </p>
           <p className="mt-2 flex flex-wrap gap-3">
             <Link href="/properties" className="font-medium underline">
@@ -170,11 +177,11 @@ function PreviewPanel({
 }) {
   const unmapped = preview.listings.filter((l) => !l.propertyId);
   return (
-    <div className="space-y-5 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+    <div className="space-y-5 rounded-xl border border-ink-200 bg-white p-5 shadow-sm">
       <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
-        <h3 className="text-base font-semibold text-slate-900">Review {fileName}</h3>
+        <h3 className="text-base font-semibold text-ink-900">Review {fileName}</h3>
         {preview.dateRange ? (
-          <span className="text-sm text-slate-500">
+          <span className="text-sm text-ink-500">
             {formatDate(preview.dateRange.start)} – {formatDate(preview.dateRange.end)}
           </span>
         ) : null}
@@ -188,7 +195,7 @@ function PreviewPanel({
       </dl>
 
       <div className="flex flex-col gap-2 text-sm sm:flex-row sm:items-center">
-        <label htmlFor="dateOrder" className="text-slate-600">
+        <label htmlFor="dateOrder" className="text-ink-600">
           Dates in this file are read as
         </label>
         <select
@@ -214,8 +221,8 @@ function PreviewPanel({
       ) : null}
 
       <div>
-        <h4 className="mb-2 text-sm font-semibold text-slate-900">Listings</h4>
-        <p className="mb-3 text-sm text-slate-600">
+        <h4 className="mb-2 text-sm font-semibold text-ink-900">Listings</h4>
+        <p className="mb-3 text-sm text-ink-600">
           Each Airbnb listing belongs to one property. New listings become new properties unless you link them to an existing one (for
           example after renaming a listing on Airbnb).
         </p>
@@ -228,14 +235,14 @@ function PreviewPanel({
                 <th className={thClass}>Property</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-ink-100">
               {preview.listings.map((listing) => (
                 <tr key={listing.name}>
-                  <td className={`${tdClass} font-medium text-slate-900`}>{listing.name}</td>
+                  <td className={`${tdClass} font-medium text-ink-900`}>{listing.name}</td>
                   <td className={`${tdClass} tabular text-right`}>{listing.rows}</td>
                   <td className={tdClass}>
                     {listing.propertyId ? (
-                      <span className="text-slate-600">Linked to {listing.propertyName}</span>
+                      <span className="text-ink-600">Linked to {listing.propertyName}</span>
                     ) : (
                       <select
                         aria-label={`Property for ${listing.name}`}
@@ -260,8 +267,8 @@ function PreviewPanel({
       </div>
 
       <details className="text-sm">
-        <summary className="cursor-pointer font-medium text-slate-700">Transaction types in this file</summary>
-        <ul className="mt-2 space-y-1 text-slate-600">
+        <summary className="cursor-pointer font-medium text-ink-700">Transaction types in this file</summary>
+        <ul className="mt-2 space-y-1 text-ink-600">
           {preview.types.map((t) => (
             <li key={t.type} className="flex items-center gap-2">
               <span className="tabular w-10 text-right">{t.count}</span>
@@ -284,7 +291,7 @@ function PreviewPanel({
         </Alert>
       ) : null}
 
-      <div className="flex flex-wrap items-center gap-3 border-t border-slate-100 pt-4">
+      <div className="flex flex-wrap items-center gap-3 border-t border-ink-100 pt-4">
         <button type="button" className={buttonClass("primary")} onClick={onCommit} disabled={pending || preview.newCount === 0}>
           {preview.newCount === 0 ? "Nothing new to import" : `Import ${preview.newCount} transaction${preview.newCount === 1 ? "" : "s"}`}
         </button>
@@ -292,7 +299,7 @@ function PreviewPanel({
           Cancel
         </button>
         {unmapped.length > 0 ? (
-          <span className="text-sm text-slate-500">
+          <span className="text-sm text-ink-500">
             {unmapped.length} new listing{unmapped.length === 1 ? "" : "s"} to set up
           </span>
         ) : null}
@@ -303,9 +310,9 @@ function PreviewPanel({
 
 function Stat({ label, value, highlight = false }: { label: string; value: number; highlight?: boolean }) {
   return (
-    <div className={`rounded-lg px-3 py-2 ${highlight ? "bg-brand-50" : "bg-slate-50"}`}>
-      <dt className="text-xs text-slate-500">{label}</dt>
-      <dd className={`tabular text-xl font-semibold ${highlight ? "text-brand-700" : "text-slate-900"}`}>{value}</dd>
+    <div className={`rounded-lg px-3 py-2 ${highlight ? "bg-brand-50" : "bg-ink-50"}`}>
+      <dt className="text-xs text-ink-500">{label}</dt>
+      <dd className={`tabular text-xl font-semibold ${highlight ? "text-brand-700" : "text-ink-900"}`}>{value}</dd>
     </div>
   );
 }

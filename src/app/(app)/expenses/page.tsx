@@ -66,9 +66,9 @@ export default async function ExpensesPage({ searchParams }: PageProps<"/expense
                 <input id="description" name="description" placeholder="Turnover clean after checkout" className={inputClass} />
               </Field>
               <fieldset className="space-y-2">
-                <legend className="mb-1 text-sm font-medium text-slate-700">Who paid?</legend>
+                <legend className="mb-1 text-sm font-medium text-ink-700">Who paid?</legend>
                 {EXPENSE_PAYERS.map((payer) => (
-                  <label key={payer} className="flex items-center gap-2 text-sm text-slate-700">
+                  <label key={payer} className="flex items-center gap-2 text-sm text-ink-700">
                     <input type="radio" name="paidBy" value={payer} defaultChecked={payer === "cohost"} className="accent-brand-600" />
                     {EXPENSE_PAYER_LABELS[payer]}
                   </label>
@@ -83,7 +83,7 @@ export default async function ExpensesPage({ searchParams }: PageProps<"/expense
             className="lg:col-span-2"
           >
             {expenses.length === 0 ? (
-              <p className="text-sm text-slate-500">No expenses recorded for {period.label}.</p>
+              <p className="text-sm text-ink-500">No expenses recorded for {period.label}.</p>
             ) : (
               <TableWrap>
                 <table className={tableClass}>
@@ -99,14 +99,14 @@ export default async function ExpensesPage({ searchParams }: PageProps<"/expense
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100">
+                  <tbody className="divide-y divide-ink-100">
                     {expenses.map((e) => (
                       <tr key={e.id}>
                         <td className={`${tdClass} whitespace-nowrap`}>{formatDate(e.date)}</td>
                         <td className={tdClass}>{e.propertyName}</td>
                         <td className={tdClass}>
-                          <div className="text-slate-900">{e.category}</div>
-                          {e.description ? <div className="text-xs text-slate-500">{e.description}</div> : null}
+                          <div className="text-ink-900">{e.category}</div>
+                          {e.description ? <div className="text-xs text-ink-500">{e.description}</div> : null}
                         </td>
                         <td className={tdClass}>
                           {e.paidBy === "cohost" ? <Badge tone="brand">You</Badge> : <Badge>Owner</Badge>}

@@ -48,7 +48,7 @@ export default async function OwnerPage({ params }: PageProps<"/owners/[id]">) {
 
         <Card title="Properties">
           {owned.length === 0 ? (
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-ink-500">
               No properties yet. Open a{" "}
               <Link href="/properties" className="underline">
                 property
@@ -56,13 +56,13 @@ export default async function OwnerPage({ params }: PageProps<"/owners/[id]">) {
               and choose {owner.name} as its owner.
             </p>
           ) : (
-            <ul className="divide-y divide-slate-100">
+            <ul className="divide-y divide-ink-100">
               {owned.map((p) => (
                 <li key={p.id} className="py-2 text-sm">
-                  <Link href={`/properties/${p.id}`} className="font-medium text-slate-900 hover:underline">
+                  <Link href={`/properties/${p.id}`} className="font-medium text-ink-900 hover:underline">
                     {p.name}
                   </Link>
-                  <div className="text-slate-500">{describeRule(propertyRule(p))}</div>
+                  <div className="text-ink-500">{describeRule(propertyRule(p))}</div>
                 </li>
               ))}
             </ul>
@@ -89,7 +89,7 @@ export default async function OwnerPage({ params }: PageProps<"/owners/[id]">) {
                 <ConfirmButton label="Turn off link" pendingLabel="Turning off…" confirmMessage="Turn off this link? The owner won't be able to open it anymore." />
               </form>
             </div>
-            <p className="text-xs text-slate-500">Statement emails include this link. Turning it off and on again creates a new link.</p>
+            <p className="text-xs text-ink-500">Statement emails include this link. Turning it off and on again creates a new link.</p>
           </div>
         ) : (
           <form action={createPortalLinkAction.bind(null, owner.id)}>
@@ -102,7 +102,7 @@ export default async function OwnerPage({ params }: PageProps<"/owners/[id]">) {
 
       <Card title="Delete owner" className="mt-6">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm text-slate-600">Their properties and bookings are kept; the properties just won&apos;t have an owner.</p>
+          <p className="text-sm text-ink-600">Their properties and bookings are kept; the properties just won&apos;t have an owner.</p>
           <form action={deleteOwnerAction.bind(null, owner.id)}>
             <ConfirmButton label="Delete owner" confirmMessage={`Delete ${owner.name}? Their properties will have no owner.`} />
           </form>

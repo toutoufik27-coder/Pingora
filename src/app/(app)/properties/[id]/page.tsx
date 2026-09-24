@@ -78,7 +78,7 @@ export default async function PropertyPage({ params }: PageProps<"/properties/[i
           <fieldset className="space-y-2">
             <legend className="sr-only">Payout flow</legend>
             {PAYOUT_FLOWS.map((flow) => (
-              <label key={flow} className="flex items-start gap-3 rounded-lg border border-slate-200 px-3 py-2 text-sm has-[:checked]:border-brand-600 has-[:checked]:bg-brand-50">
+              <label key={flow} className="flex items-start gap-3 rounded-lg border border-ink-200 px-3 py-2 text-sm has-[:checked]:border-brand-600 has-[:checked]:bg-brand-50">
                 <input type="radio" name="payoutFlow" value={flow} defaultChecked={property.payoutFlow === flow} className="mt-0.5 accent-brand-600" />
                 <span>{PAYOUT_FLOW_LABELS[flow]}</span>
               </label>
@@ -116,7 +116,7 @@ export default async function PropertyPage({ params }: PageProps<"/properties/[i
               </select>
             </Field>
             <div className="flex items-end pb-2">
-              <label className="flex items-center gap-2 text-sm text-slate-700">
+              <label className="flex items-center gap-2 text-sm text-ink-700">
                 <input
                   type="checkbox"
                   name="excludeCleaningFee"
@@ -138,7 +138,7 @@ export default async function PropertyPage({ params }: PageProps<"/properties/[i
 
       <Card title="Delete property" className="mt-6">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-ink-600">
             Removes the property with its {property.transactionCount} transactions and its expenses. Importing its Airbnb listing again
             recreates it.
           </p>

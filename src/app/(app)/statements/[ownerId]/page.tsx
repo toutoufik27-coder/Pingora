@@ -56,7 +56,7 @@ export default async function OwnerStatementPage({ params, searchParams }: PageP
 
       <Card title="Send to owner" className="mb-6">
         {lastSend ? (
-          <div className="mb-4 flex flex-wrap items-center gap-2 text-sm text-slate-600">
+          <div className="mb-4 flex flex-wrap items-center gap-2 text-sm text-ink-600">
             <Badge tone="brand">Sent</Badge>
             {lastSend.method === "email" ? `Emailed to ${lastSend.sentTo}` : "Marked as sent"} on {formatDate(lastSend.createdAt.toISOString().slice(0, 10))}
             {sends.length > 1 ? ` (${sends.length} times)` : ""}.
@@ -86,7 +86,7 @@ export default async function OwnerStatementPage({ params, searchParams }: PageP
             </Field>
           </ActionForm>
         ) : (
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-ink-600">
             <Link href={`/owners/${owner.id}`} className="font-medium text-brand-700 underline">
               Add {owner.name}&apos;s email
             </Link>{" "}
@@ -95,7 +95,7 @@ export default async function OwnerStatementPage({ params, searchParams }: PageP
         )}
         {!lastSend ? (
           <form action={markStatementSentAction.bind(null, owner.id, month)} className="mt-3">
-            <button type="submit" className="text-sm text-slate-600 underline hover:text-slate-900">
+            <button type="submit" className="text-sm text-ink-600 underline hover:text-ink-900">
               I sent it myself — mark as sent
             </button>
           </form>

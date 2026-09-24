@@ -27,7 +27,7 @@ export default async function ImportPage() {
         </Card>
 
         <Card title="How to export from Airbnb">
-          <ol className="list-decimal space-y-2 pl-5 text-sm text-slate-600">
+          <ol className="list-decimal space-y-2 pl-5 text-sm text-ink-600">
             <li>
               Sign in to Airbnb and open <strong>Menu → Earnings</strong> (on some accounts, <strong>Today → Insights → Earnings</strong>).
             </li>
@@ -39,7 +39,7 @@ export default async function ImportPage() {
               Click <strong>Export CSV</strong> and upload the file here without opening it in Excel first.
             </li>
           </ol>
-          <p className="mt-3 text-xs text-slate-500">
+          <p className="mt-3 text-xs text-ink-500">
             Airbnb renames menus from time to time. If you can&apos;t find the export, look for the CSV download on your earnings page.
           </p>
         </Card>
@@ -47,7 +47,7 @@ export default async function ImportPage() {
 
       <Card title="Import history" className="mt-6">
         {history.length === 0 ? (
-          <p className="text-sm text-slate-500">No imports yet.</p>
+          <p className="text-sm text-ink-500">No imports yet.</p>
         ) : (
           <TableWrap>
             <table className={tableClass}>
@@ -64,10 +64,10 @@ export default async function ImportPage() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-ink-100">
                 {history.map((record) => (
                   <tr key={record.id}>
-                    <td className={`${tdClass} max-w-xs truncate font-medium text-slate-900`}>{record.fileName}</td>
+                    <td className={`${tdClass} max-w-xs truncate font-medium text-ink-900`}>{record.fileName}</td>
                     <td className={tdClass}>{formatDate(record.createdAt.toISOString().slice(0, 10))}</td>
                     <td className={`${tdClass} tabular text-right`}>{record.remaining}</td>
                     <td className={`${tdClass} tabular text-right`}>{record.duplicateCount}</td>

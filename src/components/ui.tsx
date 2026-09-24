@@ -3,18 +3,18 @@ import type { ComponentProps, ReactNode } from "react";
 import { formatMoney } from "@/lib/money";
 
 export const inputClass =
-  "block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-brand-600 focus:ring-2 focus:ring-brand-100 focus:outline-none";
+  "block w-full rounded-lg border border-ink-300 bg-white px-3 py-2 text-sm text-ink-900 shadow-sm placeholder:text-ink-400 focus:border-brand-600 focus:ring-2 focus:ring-brand-100 focus:outline-none";
 
 const buttonVariants = {
-  primary: "bg-brand-600 text-white hover:bg-brand-700 disabled:bg-slate-300",
-  secondary: "border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 disabled:text-slate-400",
+  primary: "bg-brand-600 text-white shadow-brand-900/10 hover:bg-brand-700 disabled:bg-ink-300",
+  secondary: "border border-ink-200 bg-white text-ink-700 hover:border-ink-300 hover:bg-ink-50 disabled:text-ink-400",
   danger: "border border-red-200 bg-white text-red-700 hover:bg-red-50",
-  ghost: "text-slate-600 hover:bg-slate-100 hover:text-slate-900",
+  ghost: "text-ink-600 hover:bg-ink-100 hover:text-ink-900",
 };
 
 export function buttonClass(variant: keyof typeof buttonVariants = "primary", size: "sm" | "md" = "md"): string {
   const sizing = size === "sm" ? "px-2.5 py-1.5 text-xs" : "px-4 py-2 text-sm";
-  return `inline-flex items-center justify-center gap-1.5 rounded-md font-medium shadow-sm transition-colors disabled:cursor-not-allowed ${sizing} ${buttonVariants[variant]}`;
+  return `inline-flex items-center justify-center gap-1.5 rounded-lg font-medium shadow-sm transition-colors disabled:cursor-not-allowed ${sizing} ${buttonVariants[variant]}`;
 }
 
 export function ButtonLink({
@@ -30,15 +30,21 @@ export function PageHeader({ title, description, actions }: { title: string; des
   return (
     <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{title}</h1>
-        {description ? <p className="mt-1 max-w-2xl text-sm text-slate-600">{description}</p> : null}
+        <h1 className="text-2xl font-semibold tracking-tight text-ink-900">{title}</h1>
+        {description ? <p className="mt-1 max-w-2xl text-sm text-ink-600">{description}</p> : null}
       </div>
       {actions ? <div className="flex flex-wrap items-center gap-2">{actions}</div> : null}
     </div>
   );
 }
 
-export function Card({ title, description, actions, children, className = "" }: {
+export function Card({
+  title,
+  description,
+  actions,
+  children,
+  className = "",
+}: {
   title?: ReactNode;
   description?: ReactNode;
   actions?: ReactNode;
@@ -46,12 +52,12 @@ export function Card({ title, description, actions, children, className = "" }: 
   className?: string;
 }) {
   return (
-    <section className={`min-w-0 rounded-xl border border-slate-200 bg-white shadow-sm ${className}`}>
+    <section className={`min-w-0 rounded-xl border border-ink-200 bg-white shadow-sm ${className}`}>
       {title || actions ? (
-        <div className="flex flex-col gap-2 border-b border-slate-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-2 border-b border-ink-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            {title ? <h2 className="text-base font-semibold text-slate-900">{title}</h2> : null}
-            {description ? <p className="mt-0.5 text-sm text-slate-500">{description}</p> : null}
+            {title ? <h2 className="text-base font-semibold text-ink-900">{title}</h2> : null}
+            {description ? <p className="mt-0.5 text-sm text-ink-500">{description}</p> : null}
           </div>
           {actions ? <div className="flex flex-wrap gap-2">{actions}</div> : null}
         </div>
@@ -61,28 +67,40 @@ export function Card({ title, description, actions, children, className = "" }: 
   );
 }
 
-export function StatCard({ label, value, hint, tone = "default" }: { label: string; value: ReactNode; hint?: ReactNode; tone?: "default" | "brand" }) {
+export function StatCard({
+  label,
+  value,
+  hint,
+  tone = "default",
+}: {
+  label: string;
+  value: ReactNode;
+  hint?: ReactNode;
+  tone?: "default" | "brand";
+}) {
   return (
-    <div className={`min-w-0 rounded-xl border px-4 py-3 shadow-sm sm:px-5 sm:py-4 ${tone === "brand" ? "border-brand-100 bg-brand-50" : "border-slate-200 bg-white"}`}>
-      <div className="text-[11px] font-medium tracking-wide text-slate-500 uppercase sm:text-xs">{label}</div>
-      <div className="tabular mt-1 text-lg font-semibold text-slate-900 sm:text-2xl">{value}</div>
-      {hint ? <div className="mt-1 text-xs text-slate-500">{hint}</div> : null}
+    <div
+      className={`min-w-0 rounded-xl border px-4 py-3 shadow-sm sm:px-5 sm:py-4 ${tone === "brand" ? "border-brand-100 bg-brand-50" : "border-ink-200 bg-white"}`}
+    >
+      <div className="text-[11px] font-medium tracking-wide text-ink-500 uppercase sm:text-xs">{label}</div>
+      <div className="tabular mt-1 text-lg font-semibold text-ink-900 sm:text-2xl">{value}</div>
+      {hint ? <div className="mt-1 text-xs text-ink-500">{hint}</div> : null}
     </div>
   );
 }
 
 export function EmptyState({ title, children, action }: { title: string; children?: ReactNode; action?: ReactNode }) {
   return (
-    <div className="rounded-xl border border-dashed border-slate-300 bg-white px-6 py-10 text-center">
-      <h3 className="text-base font-semibold text-slate-900">{title}</h3>
-      {children ? <div className="mx-auto mt-2 max-w-md text-sm text-slate-600">{children}</div> : null}
+    <div className="rounded-xl border border-dashed border-ink-300 bg-white px-6 py-10 text-center">
+      <h3 className="text-base font-semibold text-ink-900">{title}</h3>
+      {children ? <div className="mx-auto mt-2 max-w-md text-sm text-ink-600">{children}</div> : null}
       {action ? <div className="mt-5 flex justify-center gap-2">{action}</div> : null}
     </div>
   );
 }
 
 const badgeTones = {
-  neutral: "bg-slate-100 text-slate-700",
+  neutral: "bg-ink-100 text-ink-700",
   brand: "bg-brand-50 text-brand-700",
   warning: "bg-amber-50 text-amber-800",
   danger: "bg-red-50 text-red-700",
@@ -92,7 +110,15 @@ export function Badge({ tone = "neutral", children }: { tone?: keyof typeof badg
   return <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${badgeTones[tone]}`}>{children}</span>;
 }
 
-export function Alert({ tone = "warning", title, children }: { tone?: "warning" | "info" | "danger"; title?: string; children: ReactNode }) {
+export function Alert({
+  tone = "warning",
+  title,
+  children,
+}: {
+  tone?: "warning" | "info" | "danger";
+  title?: string;
+  children: ReactNode;
+}) {
   const styles = {
     warning: "border-amber-200 bg-amber-50 text-amber-900",
     info: "border-sky-200 bg-sky-50 text-sky-900",
@@ -106,7 +132,13 @@ export function Alert({ tone = "warning", title, children }: { tone?: "warning" 
   );
 }
 
-export function Field({ label, htmlFor, hint, children, className = "" }: {
+export function Field({
+  label,
+  htmlFor,
+  hint,
+  children,
+  className = "",
+}: {
   label: string;
   htmlFor: string;
   hint?: ReactNode;
@@ -115,22 +147,22 @@ export function Field({ label, htmlFor, hint, children, className = "" }: {
 }) {
   return (
     <div className={className}>
-      <label htmlFor={htmlFor} className="mb-1 block text-sm font-medium text-slate-700">
+      <label htmlFor={htmlFor} className="mb-1 block text-sm font-medium text-ink-700">
         {label}
       </label>
       {children}
-      {hint ? <p className="mt-1 text-xs text-slate-500">{hint}</p> : null}
+      {hint ? <p className="mt-1 text-xs text-ink-500">{hint}</p> : null}
     </div>
   );
 }
 
 export function Money({ cents, currency, className = "" }: { cents: number; currency?: string; className?: string }) {
-  return <span className={`tabular ${cents < 0 ? "text-red-700" : ""} ${className}`}>{formatMoney(cents, currency)}</span>;
+  return <span className={`tabular ${cents < 0 ? "text-debit" : ""} ${className}`}>{formatMoney(cents, currency)}</span>;
 }
 
 /** Shows who owes whom for a settlement amount (positive = due to the owner). */
 export function Balance({ cents, currency }: { cents: number; currency?: string }) {
-  if (cents === 0) return <span className="tabular text-slate-500">Settled · {formatMoney(0, currency)}</span>;
+  if (cents === 0) return <span className="tabular text-ink-500">Settled · {formatMoney(0, currency)}</span>;
   return (
     <span className="tabular">
       <span className={cents > 0 ? "text-brand-700" : "text-amber-700"}>{cents > 0 ? "Pay owner " : "Owner pays you "}</span>
@@ -139,9 +171,9 @@ export function Balance({ cents, currency }: { cents: number; currency?: string 
   );
 }
 
-export const tableClass = "min-w-full divide-y divide-slate-200 text-sm";
-export const thClass = "px-3 py-2 text-left text-xs font-semibold tracking-wide text-slate-500 uppercase";
-export const tdClass = "px-3 py-2 align-top text-slate-700";
+export const tableClass = "min-w-full divide-y divide-ink-200 text-sm";
+export const thClass = "px-3 py-2 text-left text-xs font-semibold tracking-wide text-ink-500 uppercase";
+export const tdClass = "px-3 py-2 align-top text-ink-700";
 
 export function TableWrap({ children }: { children: ReactNode }) {
   // `relative` keeps visually hidden (absolutely positioned) header labels inside the scroll area.

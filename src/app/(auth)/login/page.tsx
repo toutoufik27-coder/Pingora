@@ -15,8 +15,8 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
 
   return (
     <>
-      <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Log in</h1>
-      <p className="mt-1 text-sm text-slate-600">
+      <h1 className="text-2xl font-semibold tracking-tight text-ink-900">Log in</h1>
+      <p className="mt-1 text-sm text-ink-600">
         New here?{" "}
         <Link href="/signup" className="font-medium text-brand-700 hover:underline">
           Start your free trial
@@ -31,7 +31,7 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
           <input id="password" name="password" type="password" autoComplete="current-password" required className={inputClass} />
         </Field>
         <p className="text-sm">
-          <Link href="/forgot-password" className="text-slate-600 hover:underline">
+          <Link href="/forgot-password" className="text-ink-600 hover:underline">
             Forgot your password?
           </Link>
         </p>

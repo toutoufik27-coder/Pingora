@@ -52,7 +52,7 @@ export default async function AccountPage() {
                 <input id="confirmDelete" name="confirm" required autoComplete="off" className={inputClass} />
               </Field>
             </div>
-            <p className="text-xs text-slate-500">An active subscription is cancelled automatically.</p>
+            <p className="text-xs text-ink-500">An active subscription is cancelled automatically.</p>
           </ActionForm>
         </Card>
       </div>

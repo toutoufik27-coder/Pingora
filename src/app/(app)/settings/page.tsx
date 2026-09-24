@@ -27,7 +27,7 @@ export default async function SettingsPage() {
             {ATTRIBUTION_BASES.map((basis) => (
               <label
                 key={basis}
-                className="flex items-start gap-3 rounded-lg border border-slate-200 px-3 py-2 text-sm has-[:checked]:border-brand-600 has-[:checked]:bg-brand-50"
+                className="flex items-start gap-3 rounded-lg border border-ink-200 px-3 py-2 text-sm has-[:checked]:border-brand-600 has-[:checked]:bg-brand-50"
               >
                 <input
                   type="radio"
@@ -72,7 +72,7 @@ export default async function SettingsPage() {
               </select>
             </Field>
             <div className="flex items-end pb-2">
-              <label className="flex items-center gap-2 text-sm text-slate-700">
+              <label className="flex items-center gap-2 text-sm text-ink-700">
                 <input type="checkbox" name="defaultExcludeCleaningFee" defaultChecked={workspace.defaultExcludeCleaningFee} className="size-4 accent-brand-600" />
                 Don&apos;t take commission on cleaning fees
               </label>

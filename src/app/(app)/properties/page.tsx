@@ -48,15 +48,15 @@ export default async function PropertiesPage() {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-ink-100">
                   {properties.map((p) => (
                     <tr key={p.id}>
                       <td className={tdClass}>
-                        <Link href={`/properties/${p.id}`} className="font-medium text-slate-900 hover:underline">
+                        <Link href={`/properties/${p.id}`} className="font-medium text-ink-900 hover:underline">
                           {p.name}
                         </Link>
                         {p.listingNames.some((l) => l !== p.name) ? (
-                          <div className="text-xs text-slate-500">Airbnb: {p.listingNames.join(", ")}</div>
+                          <div className="text-xs text-ink-500">Airbnb: {p.listingNames.join(", ")}</div>
                         ) : null}
                       </td>
                       <td className={tdClass}>{p.ownerName ?? <Badge tone="warning">No owner</Badge>}</td>
