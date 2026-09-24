@@ -1,17 +1,19 @@
-import { boolean, date, index, integer, pgTable, text, timestamp, uniqueIndex } from "drizzle-orm/pg-core";
+import { boolean, date, index, integer, jsonb, pgTable, text, timestamp, uniqueIndex } from "drizzle-orm/pg-core";
+import { SUBSCRIPTION_STATUSES } from "../../lib/billing";
 import {
   ATTRIBUTION_BASES,
   CLEANING_FEE_RECIPIENTS,
   COMMISSION_BASES,
   EXPENSE_PAYERS,
   PAYOUT_FLOWS,
+  SEND_METHODS,
   TRANSACTION_KINDS,
+  TRANSACTION_SOURCES,
 } from "../../lib/domain";
 
 /**
- * Every table carries a workspace id: one workspace is one co-hosting business.
- * Until sign-in exists the app uses a single default workspace (see
- * src/server/workspace.ts); the column keeps the data ready for many tenants.
+ * One workspace is one co-hosting business (a paying customer). Every business
+ * table carries a workspace id and every query filters on it.
  * Money is stored in integer cents, dates as ISO calendar dates.
  */
 
@@ -26,8 +28,74 @@ export const workspaces = pgTable("workspaces", {
   defaultCommissionRateBps: integer("default_commission_rate_bps").notNull().default(2000),
   defaultExcludeCleaningFee: boolean("default_exclude_cleaning_fee").notNull().default(true),
   defaultPayoutFlow: text("default_payout_flow", { enum: PAYOUT_FLOWS }).notNull().default("cohost_collects"),
+  // Subscription state, kept in sync by the billing provider's webhooks.
+  subscriptionStatus: text("subscription_status", { enum: SUBSCRIPTION_STATUSES }).notNull().default("trialing"),
+  trialEndsAt: timestamp("trial_ends_at", { withTimezone: true }),
+  currentPeriodEndsAt: timestamp("current_period_ends_at", { withTimezone: true }),
+  billingCustomerId: text("billing_customer_id"),
+  billingSubscriptionId: text("billing_subscription_id"),
+  billingPortalUrl: text("billing_portal_url"),
+  /** `updated_at` of the last applied subscription event; older events arriving late are ignored. */
+  billingUpdatedAt: timestamp("billing_updated_at", { withTimezone: true }),
   createdAt: createdAt(),
 });
+
+export const users = pgTable(
+  "users",
+  {
+    id: text("id").primaryKey(),
+    workspaceId: text("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+    /** Always stored lowercased. */
+    email: text("email").notNull(),
+    name: text("name").notNull(),
+    passwordHash: text("password_hash").notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [uniqueIndex("users_email_uq").on(t.email), index("users_workspace_idx").on(t.workspaceId)],
+);
+
+/** Sessions are looked up by the SHA-256 of the cookie token, so a database leak exposes no usable session. */
+export const sessions = pgTable(
+  "sessions",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [index("sessions_user_idx").on(t.userId)],
+);
+
+/** Single-use tokens (password reset), also stored hashed. */
+export const authTokens = pgTable(
+  "auth_tokens",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    purpose: text("purpose", { enum: ["password_reset"] }).notNull(),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+    usedAt: timestamp("used_at", { withTimezone: true }),
+    createdAt: createdAt(),
+  },
+  (t) => [index("auth_tokens_user_idx").on(t.userId)],
+);
+
+/** One row per attempt of a rate-limited action (login, sign-up, password reset). */
+export const rateLimitHits = pgTable(
+  "rate_limit_hits",
+  {
+    id: text("id").primaryKey(),
+    key: text("key").notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [index("rate_limit_hits_key_idx").on(t.key, t.createdAt)],
+);
 
 export const owners = pgTable(
   "owners",
@@ -38,9 +106,11 @@ export const owners = pgTable(
       .references(() => workspaces.id, { onDelete: "cascade" }),
     name: text("name").notNull(),
     email: text("email"),
+    /** Secret for the owner's read-only statement page; null when no link is shared. */
+    portalToken: text("portal_token"),
     createdAt: createdAt(),
   },
-  (t) => [index("owners_workspace_idx").on(t.workspaceId)],
+  (t) => [index("owners_workspace_idx").on(t.workspaceId), uniqueIndex("owners_portal_token_uq").on(t.portalToken)],
 );
 
 export const properties = pgTable(
@@ -107,13 +177,15 @@ export const transactions = pgTable(
     workspaceId: text("workspace_id")
       .notNull()
       .references(() => workspaces.id, { onDelete: "cascade" }),
-    importId: text("import_id")
-      .notNull()
-      .references(() => imports.id, { onDelete: "cascade" }),
+    /** Null for bookings entered by hand. */
+    importId: text("import_id").references(() => imports.id, { onDelete: "cascade" }),
     propertyId: text("property_id")
       .notNull()
       .references(() => properties.id, { onDelete: "cascade" }),
     fingerprint: text("fingerprint").notNull(),
+    source: text("source", { enum: TRANSACTION_SOURCES }).notNull().default("airbnb"),
+    /** Booking channel shown on statements: "Airbnb", "VRBO", "Direct"… */
+    channel: text("channel").notNull().default("Airbnb"),
     kind: text("kind", { enum: TRANSACTION_KINDS }).notNull(),
     type: text("type").notNull(),
     date: date("date", { mode: "string" }).notNull(),
@@ -163,7 +235,39 @@ export const expenses = pgTable(
   (t) => [index("expenses_property_date_idx").on(t.propertyId, t.date)],
 );
 
+/** Record of a statement delivered to an owner, with the totals at that moment. */
+export const statementSends = pgTable(
+  "statement_sends",
+  {
+    id: text("id").primaryKey(),
+    workspaceId: text("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+    ownerId: text("owner_id")
+      .notNull()
+      .references(() => owners.id, { onDelete: "cascade" }),
+    /** "YYYY-MM". */
+    period: text("period").notNull(),
+    method: text("method", { enum: SEND_METHODS }).notNull(),
+    sentTo: text("sent_to"),
+    snapshot: jsonb("snapshot").$type<StatementSnapshot>().notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [index("statement_sends_owner_period_idx").on(t.ownerId, t.period)],
+);
+
+export interface StatementSnapshot {
+  bookings: number;
+  payoutCents: number;
+  cohostFeesCents: number;
+  expensesCents: number;
+  balanceDueToOwnerCents: number;
+}
+
 export type Workspace = typeof workspaces.$inferSelect;
+export type User = typeof users.$inferSelect;
+export type Session = typeof sessions.$inferSelect;
+export type StatementSend = typeof statementSends.$inferSelect;
 export type Owner = typeof owners.$inferSelect;
 export type Property = typeof properties.$inferSelect;
 export type ListingMapping = typeof listingMappings.$inferSelect;

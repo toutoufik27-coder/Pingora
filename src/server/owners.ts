@@ -56,3 +56,20 @@ export async function deleteOwner(db: Database, workspaceId: string, ownerId: st
     .returning({ id: owners.id });
   return deleted.length > 0;
 }
+
+/** Owners whose statements a workspace has shared, for the public read-only portal. */
+export async function getOwnerByPortalToken(db: Database, token: string): Promise<Owner | null> {
+  if (!token || token.length > 100) return null;
+  const [owner] = await db.select().from(owners).where(eq(owners.portalToken, token));
+  return owner ?? null;
+}
+
+/** Sets or (with null) revokes the owner's portal link. */
+export async function setOwnerPortalToken(db: Database, workspaceId: string, ownerId: string, token: string | null): Promise<boolean> {
+  const updated = await db
+    .update(owners)
+    .set({ portalToken: token })
+    .where(and(eq(owners.workspaceId, workspaceId), eq(owners.id, ownerId)))
+    .returning({ id: owners.id });
+  return updated.length > 0;
+}

@@ -15,7 +15,12 @@ CoHost Ledger turns Airbnb transaction exports into monthly owner statements for
 - Checks: `npm test`, `npm run typecheck`, `npm run lint`, `npm run build`. Run all four before committing.
 - Pure domain logic lives in `src/lib` and must stay free of database and Next.js imports so it can be unit-tested.
 - Data access lives in `src/server`; every query is scoped by `workspaceId`. Pages, routes and server actions get the
-  database and workspace from `getAppContext()` in `src/server/context.ts` (the place to add sign-in later).
+  database, user and workspace from `getAppContext()` in `src/server/context.ts`, which requires a session and (unless
+  `allowInactive`) an active trial or subscription. Never trust ids from the client without scoping by workspace.
+- Auth is custom and small: scrypt hashes, sessions stored as SHA-256 of the cookie token (`src/server/auth`). Rate limit
+  anything an anonymous visitor can trigger.
+- Route groups: `(marketing)` public site, `(auth)` sign-in pages, `(app)` signed-in app; `src/proxy.ts` must list new app paths.
+- End-to-end tests: `npm run build && npm run test:e2e` (emails land in `.e2e/outbox`); add `E2E_DATABASE_URL` to run them on Postgres.
 - Money is integer cents (`src/lib/money.ts`), dates are ISO `YYYY-MM-DD` strings, months are `YYYY-MM`.
 - Schema changes: edit `src/server/db/schema.ts`, then `npm run db:generate` to add a migration under `drizzle/`.
 - `src/server/db/schema.ts` uses relative imports because drizzle-kit does not resolve the `@/` alias.

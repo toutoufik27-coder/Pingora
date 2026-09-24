@@ -85,3 +85,12 @@ export async function updateProperty(
     .returning({ id: properties.id });
   return updated.length > 0 ? "ok" : "not_found";
 }
+
+/** Deletes a property with its bookings, expenses and listing links. */
+export async function deleteProperty(db: Database, workspaceId: string, propertyId: string): Promise<boolean> {
+  const deleted = await db
+    .delete(properties)
+    .where(and(eq(properties.workspaceId, workspaceId), eq(properties.id, propertyId)))
+    .returning({ id: properties.id });
+  return deleted.length > 0;
+}

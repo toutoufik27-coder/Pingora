@@ -42,7 +42,7 @@ export function parseCsv(text: string, delimiter = detectDelimiter(text)): strin
 
 /** Picks the delimiter that splits the header line into the most columns. */
 export function detectDelimiter(text: string): string {
-  const firstLine = text.replace(/^﻿/, "").split(/\r?\n/, 1)[0] ?? "";
+  const firstLine = text.replace(/^\ufeff/, "").split(/\r?\n/, 1)[0] ?? "";
   let best = ",";
   let bestCount = 0;
   for (const candidate of [",", ";", "\t"]) {

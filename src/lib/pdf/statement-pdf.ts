@@ -187,7 +187,10 @@ function money(cents: number, currency: string): string {
 
 function lineDescription(line: StatementLine): string {
   const tx = line.transaction;
-  if (tx.kind === "reservation") return tx.guest || "Reservation";
+  if (tx.kind === "reservation") {
+    const guest = tx.guest || "Reservation";
+    return tx.channel && tx.channel !== "Airbnb" ? `${guest} (${tx.channel})` : guest;
+  }
   return [tx.type, tx.details || tx.guest].filter(Boolean).join(" - ");
 }
 
@@ -220,7 +223,7 @@ export async function renderStatementPdf(statement: OwnerStatement, options: Sta
   layout.y -= 16;
 
   const basis =
-    statement.basis === "checkin" ? "Bookings are counted in the month of check-in." : "Bookings are counted in the month Airbnb paid them.";
+    statement.basis === "checkin" ? "Bookings are counted in the month of check-in." : "Bookings are counted in the month they were paid out.";
   const details: [string, string][] = [
     ["Prepared for", [statement.owner.name, statement.owner.email].filter(Boolean).join(" · ")],
     ["Period", `${formatDate(statement.period.start)} - ${formatDate(statement.period.end)}`],
@@ -238,8 +241,8 @@ export async function renderStatementPdf(statement: OwnerStatement, options: Sta
   layout.text("Summary", MARGIN, layout.y, { size: 11, bold: true });
   layout.y -= 8;
   layout.keyValue("Gross booking revenue", money(totals.grossCents, currency));
-  layout.keyValue("Airbnb host fees", money(-totals.serviceFeeCents, currency));
-  layout.keyValue("Airbnb payouts", money(totals.payoutCents, currency), { bold: true });
+  layout.keyValue("Platform fees", money(-totals.serviceFeeCents, currency));
+  layout.keyValue("Payouts", money(totals.payoutCents, currency), { bold: true });
   layout.keyValue("Co-host fees", money(-totals.cohostFeesCents, currency));
   if (totals.reimbursableExpensesCents !== 0) {
     layout.keyValue("Expenses paid by co-host", money(-totals.reimbursableExpensesCents, currency));
@@ -293,7 +296,7 @@ function renderProperty(layout: Layout, section: PropertyStatement, currency: st
       { header: "Nights", width: 36, align: "right" },
       { header: "Code", width: 72 },
       { header: "Gross", width: 60, align: "right" },
-      { header: "Airbnb fee", width: 60, align: "right" },
+      { header: "Platform fee", width: 60, align: "right" },
       { header: "Payout", width: 60, align: "right" },
       { header: "Co-host fee", width: 60, align: "right" },
     ];

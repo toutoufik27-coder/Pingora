@@ -1,17 +1,22 @@
+import { randomUUID } from "node:crypto";
 import { eq } from "drizzle-orm";
+import { trialEndFrom } from "@/lib/billing";
 import type { AttributionBasis, CommissionBase, PayoutFlow } from "@/lib/domain";
 import type { Database } from "./db/client";
 import { workspaces, type Workspace } from "./db/schema";
 
-/** Until sign-in exists, everything lives in this workspace. */
-export const DEFAULT_WORKSPACE_ID = "default";
+/** Creates a co-hosting business with a fresh free trial. */
+export async function createWorkspace(db: Database, name: string, now = new Date()): Promise<Workspace> {
+  const [workspace] = await db
+    .insert(workspaces)
+    .values({ id: randomUUID(), name, subscriptionStatus: "trialing", trialEndsAt: trialEndFrom(now) })
+    .returning();
+  return workspace;
+}
 
-export async function ensureWorkspace(db: Database, id = DEFAULT_WORKSPACE_ID): Promise<Workspace> {
-  const [existing] = await db.select().from(workspaces).where(eq(workspaces.id, id));
-  if (existing) return existing;
-  await db.insert(workspaces).values({ id, name: "My Co-Hosting Business" }).onConflictDoNothing();
-  const [created] = await db.select().from(workspaces).where(eq(workspaces.id, id));
-  return created;
+export async function getWorkspace(db: Database, id: string): Promise<Workspace | null> {
+  const [workspace] = await db.select().from(workspaces).where(eq(workspaces.id, id));
+  return workspace ?? null;
 }
 
 export interface WorkspaceSettingsInput {

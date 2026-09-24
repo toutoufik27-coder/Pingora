@@ -4,14 +4,16 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const LINKS = [
-  { href: "/", label: "Dashboard" },
+  { href: "/dashboard", label: "Dashboard" },
   { href: "/import", label: "Import from Airbnb" },
   { href: "/statements", label: "Owner statements" },
+  { href: "/transactions", label: "Bookings" },
   { href: "/properties", label: "Properties" },
   { href: "/owners", label: "Owners" },
   { href: "/expenses", label: "Expenses" },
   { href: "/reports/annual", label: "Annual summary" },
   { href: "/settings", label: "Settings" },
+  { href: "/billing", label: "Billing" },
 ];
 
 export function NavLinks() {
@@ -19,7 +21,7 @@ export function NavLinks() {
   return (
     <nav className="flex gap-1 overflow-x-auto px-3 pb-3 md:flex-col md:overflow-visible md:pb-6">
       {LINKS.map((link) => {
-        const active = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
+        const active = pathname === link.href || pathname.startsWith(`${link.href}/`);
         return (
           <Link
             key={link.href}

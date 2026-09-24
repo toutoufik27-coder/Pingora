@@ -10,14 +10,14 @@ import { commitImport, deleteImport, listImports, NEW_PROPERTY, previewImport } 
 import { createOwner, deleteOwner, listOwners } from "./owners";
 import { listProperties, updateProperty, type PropertyInput } from "./properties";
 import { loadOwnerStatement, loadStatements } from "./statements";
-import { ensureWorkspace } from "./workspace";
+import { createWorkspace } from "./workspace";
 
 const SAMPLE = readFileSync(path.join(process.cwd(), "public/samples/airbnb-transaction-history-sample.csv"), "utf8");
 const ALL_NEW = { "Sunny Loft Downtown": NEW_PROPERTY, "Lakeview Cabin": NEW_PROPERTY, "Beach Bungalow #2": NEW_PROPERTY };
 
 async function freshWorkspace(): Promise<{ db: Database; workspace: Workspace }> {
   const db = await openPgliteDatabase();
-  return { db, workspace: await ensureWorkspace(db) };
+  return { db, workspace: await createWorkspace(db, "Harbor Co-Hosting") };
 }
 
 function propertyInput(overrides: Partial<PropertyInput>): PropertyInput {
@@ -36,10 +36,17 @@ function propertyInput(overrides: Partial<PropertyInput>): PropertyInput {
 }
 
 describe("workspace", () => {
-  it("creates the default workspace once", async () => {
-    const { db, workspace } = await freshWorkspace();
-    expect(workspace).toMatchObject({ id: "default", attributionBasis: "checkin", defaultCommissionRateBps: 2000 });
-    await ensureWorkspace(db);
+  it("starts with a 14-day free trial and sensible defaults", async () => {
+    const db = await openPgliteDatabase();
+    const now = new Date("2026-09-01T12:00:00Z");
+    const workspace = await createWorkspace(db, "Harbor Co-Hosting", now);
+    expect(workspace).toMatchObject({
+      name: "Harbor Co-Hosting",
+      attributionBasis: "checkin",
+      defaultCommissionRateBps: 2000,
+      subscriptionStatus: "trialing",
+      trialEndsAt: new Date("2026-09-15T12:00:00Z"),
+    });
     expect(await db.select().from(workspaces)).toHaveLength(1);
   });
 });

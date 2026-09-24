@@ -38,6 +38,13 @@ export const PAYOUT_FLOW_LABELS: Record<PayoutFlow, string> = {
   airbnb_split: "Airbnb splits the payout and pays my fee directly",
 };
 
+/** The same flows, worded for the owner reading their statement. */
+export const PAYOUT_FLOW_OWNER_LABELS: Record<PayoutFlow, string> = {
+  cohost_collects: "Your co-host receives the Airbnb payouts and pays you",
+  owner_collects: "You receive the Airbnb payouts and pay your co-host",
+  airbnb_split: "Airbnb pays your co-host's fee directly",
+};
+
 export const PAYOUT_FLOW_SHORT_LABELS: Record<PayoutFlow, string> = {
   cohost_collects: "Co-host collects",
   owner_collects: "Owner collects",
@@ -83,3 +90,13 @@ export interface CommissionRule {
   /** Charged once per statement month, bookings or not. */
   monthlyFeeCents: number;
 }
+
+/** Where a transaction came from. Manual entries cover direct, VRBO and other bookings. */
+export const TRANSACTION_SOURCES = ["airbnb", "manual"] as const;
+export type TransactionSource = (typeof TRANSACTION_SOURCES)[number];
+
+export const MANUAL_CHANNELS = ["Direct", "VRBO", "Booking.com", "Furnished Finder", "Other"] as const;
+
+/** How an owner statement was delivered. */
+export const SEND_METHODS = ["email", "manual"] as const;
+export type SendMethod = (typeof SEND_METHODS)[number];

@@ -46,5 +46,8 @@ export function getDb(): Promise<Database> {
 async function createDatabase(): Promise<Database> {
   const url = process.env.DATABASE_URL;
   if (url) return openPostgresDatabase(url);
+  if (process.env.VERCEL) {
+    throw new Error("DATABASE_URL is not set. Serverless hosts need a Postgres database; see README → Deploying.");
+  }
   return openPgliteDatabase(process.env.PGLITE_DATA_DIR ?? path.join(process.cwd(), ".data", "pglite"));
 }

@@ -31,6 +31,7 @@ function toStatementTransaction(row: Transaction): StatementTransaction {
     confirmationCode: row.confirmationCode,
     details: row.details,
     currency: row.currency,
+    channel: row.channel,
     amountCents: row.amountCents,
     grossEarningsCents: row.grossEarningsCents,
     serviceFeeCents: row.serviceFeeCents,

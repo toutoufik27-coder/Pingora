@@ -33,6 +33,8 @@ export interface StatementTransaction extends FeeableLine {
   confirmationCode: string;
   details: string;
   currency: string;
+  /** Booking channel; statements show it when it is not Airbnb. */
+  channel?: string;
 }
 
 export interface StatementExpense {
