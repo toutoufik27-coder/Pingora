@@ -15,7 +15,7 @@ export default async function SignupPage() {
 
   return (
     <>
-      <h1 className="text-xl font-semibold text-slate-900">Start your {TRIAL_DAYS}-day free trial</h1>
+      <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Start your {TRIAL_DAYS}-day free trial</h1>
       <p className="mt-1 text-sm text-slate-600">
         No credit card needed. Already have an account?{" "}
         <Link href="/login" className="font-medium text-brand-700 hover:underline">

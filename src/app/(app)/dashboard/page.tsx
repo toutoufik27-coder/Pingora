@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Alert, ButtonLink, Card, PageHeader, StatCard } from "@/components/ui";
-import { defaultStatementMonth, formatDate, monthPeriod } from "@/lib/dates";
+import { FeesChart } from "@/components/fees-chart";
+import { defaultStatementMonth, formatDate, monthPeriod, shiftMonth } from "@/lib/dates";
 import { formatMoney } from "@/lib/money";
 import { hasActivity } from "@/lib/statement";
 import { getAppContext } from "@/server/context";
@@ -19,6 +20,18 @@ export default async function DashboardPage() {
     listImports(db, workspace.id),
     loadStatements(db, workspace, period),
   ]);
+  // Fees for the six months up to the one that just ended.
+  const chartMonths = [5, 4, 3, 2, 1, 0].map((back) => shiftMonth(month, -back));
+  const history = await Promise.all(
+    chartMonths.map(async (m) => {
+      const { statements: monthly } = await loadStatements(db, workspace, monthPeriod(m));
+      return {
+        month: m,
+        label: monthPeriod(m).label.slice(0, 3),
+        cents: monthly.reduce((total, s) => total + s.totals.cohostFeesCents, 0),
+      };
+    }),
+  );
 
   const withoutOwner = properties.filter((p) => !p.ownerId);
   const active = statements.filter(hasActivity);
@@ -91,6 +104,10 @@ export default async function DashboardPage() {
           </Alert>
         </div>
       ) : null}
+
+      <Card title="Your fees per month" description="Commission, flat and monthly fees across all owners, last six months." className="mb-6">
+        <FeesChart points={history} />
+      </Card>
 
       <div className="grid gap-6 lg:grid-cols-2">
         <Card title="Owners" actions={<ButtonLink href="/owners" variant="secondary" size="sm">Manage</ButtonLink>}>

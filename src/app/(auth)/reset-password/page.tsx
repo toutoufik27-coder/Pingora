@@ -16,7 +16,7 @@ export default async function ResetPasswordPage({ searchParams }: PageProps<"/re
   if (!valid) {
     return (
       <>
-        <h1 className="text-xl font-semibold text-slate-900">This link has expired</h1>
+        <h1 className="text-2xl font-semibold tracking-tight text-slate-900">This link has expired</h1>
         <p className="mt-2 text-sm text-slate-600">Reset links work once and for one hour.</p>
         <p className="mt-6 text-sm">
           <Link href="/forgot-password" className="font-medium text-brand-700 hover:underline">
@@ -29,7 +29,7 @@ export default async function ResetPasswordPage({ searchParams }: PageProps<"/re
 
   return (
     <>
-      <h1 className="text-xl font-semibold text-slate-900">Choose a new password</h1>
+      <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Choose a new password</h1>
       <p className="mt-1 text-sm text-slate-600">You&apos;ll be signed out of your other devices.</p>
       <ActionForm action={resetPasswordAction} submitLabel="Save new password" className="mt-6 space-y-4">
         <input type="hidden" name="token" value={token} />
