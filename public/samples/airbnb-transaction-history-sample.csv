@@ -1,0 +1,30 @@
+Date,Arriving by date,Type,Confirmation code,Booking date,Start date,End date,Nights,Guest,Listing,Details,Reference code,Currency,Amount,Paid out,Service fee,Fast pay fee,Cleaning fee,Gross earnings,Occupancy taxes,Earnings year
+08/04/2026,08/05/2026,Reservation,HMSL8K2QXA,07/12/2026,08/03/2026,08/06/2026,3,Emily Carter,Sunny Loft Downtown,,,USD,504.40,,15.60,,85.00,520.00,62.40,2026
+08/04/2026,08/05/2026,Payout,,,,,,,,Transfer to Checking ****4821 (USD),,USD,,504.40,,,,,,
+08/08/2026,08/09/2026,Reservation,HMLVC2N7PS,06/30/2026,08/07/2026,08/11/2026,4,Tran Nguyen,Lakeview Cabin,,,USD,931.20,,28.80,,120.00,960.00,,2026
+08/08/2026,08/09/2026,Payout,,,,,,,,Transfer to Checking ****4821 (USD),,USD,,931.20,,,,,,
+08/11/2026,08/12/2026,Reservation,HMBB4T9LQC,07/05/2026,08/10/2026,08/15/2026,5,Grace Liu,Beach Bungalow #2,,,USD,965.15,,29.85,,95.00,995.00,,2026
+08/11/2026,08/12/2026,Payout,,,,,,,,Transfer to Checking ****4821 (USD),,USD,,965.15,,,,,,
+08/15/2026,08/16/2026,Reservation,HMSL3JD9RT,07/28/2026,08/14/2026,08/18/2026,4,Marco Rossi,Sunny Loft Downtown,,,USD,645.05,,19.95,,85.00,665.00,79.80,2026
+08/15/2026,08/16/2026,Payout,,,,,,,,Transfer to Checking ****4821 (USD),,USD,,645.05,,,,,,
+08/22/2026,08/23/2026,Reservation,HMLV5R8XWG,07/19/2026,08/21/2026,08/24/2026,3,Olivia Brooks,Lakeview Cabin,,,USD,727.50,,22.50,,120.00,750.00,,2026
+08/22/2026,08/23/2026,Payout,,,,,,,,Transfer to Checking ****4821 (USD),,USD,,727.50,,,,,,
+08/23/2026,08/24/2026,Reservation,HMSL7PQ2ZN,08/02/2026,08/22/2026,08/27/2026,5,Aisha Rahman,Sunny Loft Downtown,,,USD,785.70,,24.30,,85.00,810.00,97.20,2026
+08/23/2026,08/24/2026,Payout,,,,,,,,Transfer to Checking ****4821 (USD),,USD,,785.70,,,,,,
+08/29/2026,08/30/2026,Reservation,HMBB7W2NRF,08/01/2026,08/28/2026,09/01/2026,4,Ethan Walker,Beach Bungalow #2,,,USD,790.55,,24.45,,95.00,815.00,,2026
+08/29/2026,08/30/2026,Payout,,,,,,,,Transfer to Checking ****4821 (USD),,USD,,790.55,,,,,,
+09/02/2026,09/03/2026,Reservation,HMLVK3D6HJ,08/10/2026,09/01/2026,09/08/2026,7,Daniel Kim,Lakeview Cabin,,,USD,1542.30,,47.70,,120.00,1590.00,,2026
+09/02/2026,09/03/2026,Adjustment,HMSL3JD9RT,,08/14/2026,08/18/2026,,Marco Rossi,Sunny Loft Downtown,Partial refund - AC outage,,USD,-60.00,,-1.86,,,-61.86,,2026
+09/02/2026,09/03/2026,Payout,,,,,,,,Transfer to Checking ****4821 (USD),,USD,,1482.30,,,,,,
+09/05/2026,09/06/2026,Reservation,HMSLW4M8CB,08/15/2026,09/04/2026,09/06/2026,2,José Álvarez,Sunny Loft Downtown,,,USD,363.75,,11.25,,85.00,375.00,45.00,2026
+09/05/2026,09/06/2026,Payout,,,,,,,,Transfer to Checking ****4821 (USD),,USD,,363.75,,,,,,
+09/10/2026,09/11/2026,Reservation,HMBB2K5JVD,08/18/2026,09/09/2026,09/12/2026,3,Chloé Martin,Beach Bungalow #2,,,USD,615.95,,19.05,,95.00,635.00,,2026
+09/10/2026,09/11/2026,Resolution Payout,HMLV5R8XWG,,,,,Olivia Brooks,Lakeview Cabin,Damage reimbursement - broken lamp,RES-55812,USD,150.00,,,,,,,2026
+09/10/2026,09/11/2026,Pass Through Tot,HMBB2K5JVD,,09/09/2026,09/12/2026,3,Chloé Martin,Beach Bungalow #2,Occupancy taxes passed through to host,,USD,76.20,,,,,,,2026
+09/10/2026,09/11/2026,Payout,,,,,,,,Transfer to Checking ****4821 (USD),,USD,,842.15,,,,,,
+09/13/2026,09/14/2026,Reservation,HMSLQ9V3KE,08/20/2026,09/12/2026,09/18/2026,6,Hannah Schmidt,Sunny Loft Downtown,,,USD,926.35,,28.65,,85.00,955.00,114.60,2026
+09/13/2026,09/14/2026,Payout,,,,,,,,Transfer to Checking ****4821 (USD),,USD,,926.35,,,,,,
+09/19/2026,09/20/2026,Reservation,HMLVZ8F2MA,08/25/2026,09/18/2026,09/20/2026,2,Sofia Petrova,Lakeview Cabin,,,USD,523.80,,16.20,,120.00,540.00,,2026
+09/19/2026,09/20/2026,Payout,,,,,,,,Transfer to Checking ****4821 (USD),,USD,,523.80,,,,,,
+09/20/2026,09/21/2026,Reservation,HMSLT6H1DU,09/01/2026,09/19/2026,09/22/2026,3,李伟,Sunny Loft Downtown,,,USD,504.40,,15.60,,85.00,520.00,62.40,2026
+09/20/2026,09/21/2026,Payout,,,,,,,,Transfer to Checking ****4821 (USD),,USD,,504.40,,,,,,

@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+/*
+ * Calm palette: warm paper neutrals ("ink") and a soft sage-teal brand. Every
+ * text/background pair used in the app keeps WCAG AA contrast (ink-500 on
+ * ink-50 is 5:1, white on brand-600 is 6.2:1).
+ */
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --color-brand-50: #f1f7f4;
+  --color-brand-100: #dcece5;
+  --color-brand-200: #bddbcf;
+  --color-brand-300: #93c2b0;
+  --color-brand-400: #6aa693;
+  --color-brand-500: #4d8b78;
+  --color-brand-600: #2f6b5e;
+  --color-brand-700: #275a4f;
+  --color-brand-800: #214a41;
+  --color-brand-900: #1b3c35;
+
+  --color-ink-50: #faf8f4;
+  --color-ink-100: #f3f0ea;
+  --color-ink-200: #e7e2d9;
+  --color-ink-300: #d4cec3;
+  --color-ink-400: #a39d92;
+  --color-ink-500: #716b62;
+  --color-ink-600: #5c574f;
+  --color-ink-700: #46423c;
+  --color-ink-800: #33302b;
+  --color-ink-900: #2a2724;
+  --color-ink-950: #1c1a18;
+
+  /* Deductions and negative amounts: a soft terracotta instead of alarm red. */
+  --color-debit: #9b4d3f;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  background: var(--color-ink-50);
+  color: var(--color-ink-900);
+}
+
+/* Tabular figures keep money columns aligned. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
