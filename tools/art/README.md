@@ -26,3 +26,17 @@ colours, eyes, legs and camera fixed). It builds the same animals as Blender
 meshes, which can be exported to FBX and imported in Studio later.
 
 The concept sheet the designs follow is `docs/art/animals-concept.png`.
+
+## Sculpted models (signed distance fields)
+
+`sdf.py` is a small sculpting kit (ellipsoids, round cones, flat feathers, smooth
+union, marching cubes). `models.py` sculpts each animal with it — so far the
+chicken and the duck — and `sculpt.py` builds them in Blender (needs
+`pip install bpy scikit-image`):
+
+```sh
+python -I tools/art/sculpt.py /tmp/sculpt Chicken Duck --render
+python tools/art/compare.py /tmp/sculpt docs/art/chicken-duck-compare.png Chicken Duck
+```
+
+`compare.py` puts the concept art next to the renders.
