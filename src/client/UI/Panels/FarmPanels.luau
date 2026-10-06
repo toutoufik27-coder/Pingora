@@ -109,7 +109,7 @@ return function(App, Farming)
 				Net.action("SellAll")
 			end, { Size = UDim2.new(1, 0, 0, 36), BackgroundColor3 = Kit.colors.buttonAlt, Parent = ctx.body })
 			local list = Kit.scroll(ctx.body, UDim2.new(1, 0, 1, -44), UDim2.fromOffset(0, 42))
-			local bonus = p.RebirthBonus or 0
+			local bonus = p.LegacyBonus or 0
 			for i, key in Common.inventoryKeys(p.Inventory, { "crop", "product", "good", "material" }) do
 				local n = p.Inventory[key]
 				local price = Pricing.sellPrice(key, bonus)
@@ -157,7 +157,7 @@ return function(App, Farming)
 		end,
 	})
 
-	-- my farm: land, expansion, themes, rebirth -------------------------------
+	-- my farm: land, expansion, themes, legacy -------------------------------
 	App.register("Farm", {
 		title = "panel.farm",
 		listens = { "Profile" },
@@ -203,7 +203,7 @@ return function(App, Farming)
 				end, { Size = UDim2.fromOffset(110, 34), LayoutOrder = 3, Parent = row })
 				Kit.setEnabled(b, p.Land ~= id and p.Level >= Economy.LAND_CHOICE_LEVEL)
 			end
-			if p.Rebirths >= Economy.SECOND_LAND_REBIRTHS then
+			if (p.Legacy or 0) >= Economy.LEGACY_SECOND_LAND then
 				order += 1
 				Kit.label(Locale.t("ui.secondLand", { land = p.SecondLand and Locale.pick(Lands[p.SecondLand].name) or "—" }), { LayoutOrder = order, Parent = list })
 				for _, id in landIds do
@@ -246,27 +246,39 @@ return function(App, Farming)
 				local b = Kit.button(Locale.pick(t.name) .. (if p.Theme == t.id then " ✔" elseif owned then "" else " 🔒"), function()
 					if owned then
 						Net.action("SetTheme", t.id)
+					elseif t.legacy then
+						-- required lazily: Feedback depends on App
+						local Feedback = require(script.Parent.Parent.Parent.Controllers.Feedback)
+						Feedback.toast(Locale.t("ui.legacyThemeHint", { n = Economy.LEGACY_THEME }), "info")
 					else
 						App.open("RobuxShop")
 					end
 				end, { Size = UDim2.new(1, 0, 0, 34), BackgroundColor3 = Common.color(t.fence), LayoutOrder = order, Parent = list })
 				local _ = b
 			end
-			-- rebirth
+			-- legacy: past the max level, xp keeps counting and nothing resets
+			local legacy = p.Legacy or 0
 			order += 1
-			Kit.label(Locale.t("ui.rebirthTitle"), { Font = Kit.font, TextSize = 18, LayoutOrder = order, Parent = list })
+			Kit.label(Locale.t("ui.legacyTitle"), { Font = Kit.font, TextSize = 18, LayoutOrder = order, Parent = list })
 			order += 1
-			Kit.label(Locale.t("ui.rebirthHelp", { level = Economy.REBIRTH_LEVEL, coins = Locale.num(Economy.REBIRTH_COINS), bonus = math.floor((p.RebirthBonus or 0) * 100) }), { TextColor3 = Kit.colors.muted, LayoutOrder = order, Parent = list })
-			order += 1
-			local rb = Kit.button(Locale.t("ui.rebirth"), function()
-				App.open("Confirm", {
-					text = Locale.t("ui.rebirthConfirm"),
-					onYes = function()
-						Net.action("Rebirth")
-					end,
-				})
-			end, { BackgroundColor3 = Kit.colors.gold, LayoutOrder = order, Parent = list })
-			Kit.setEnabled(rb, Levels.canRebirth(p.Level, p.Coins, p.Rebirths))
+			local title = Levels.legacyTitle(legacy)
+			local lines = {
+				Locale.t("ui.legacyHelp", { level = Economy.MAX_LEVEL }),
+				Locale.t("ui.legacyLevel", { n = legacy }) .. (if title then " · " .. Locale.pick(title) else ""),
+				Locale.t("ui.legacyBonus", { bonus = math.floor((p.LegacyBonus or 0) * 100 + 0.5) }),
+			}
+			if p.Level >= Economy.MAX_LEVEL then
+				table.insert(lines, Locale.t("ui.legacyProgress", { xp = Locale.num(p.XP), need = Locale.num(p.XPNeed) }))
+			end
+			local unlocks = {
+				{ at = Economy.LEGACY_SECOND_LAND, key = "ui.legacyUnlockLand" },
+				{ at = Economy.LEGACY_COMPANION_SLOT, key = "ui.legacyUnlockCompanion" },
+				{ at = Economy.LEGACY_THEME, key = "ui.legacyUnlockTheme" },
+			}
+			for _, u in unlocks do
+				table.insert(lines, (if legacy >= u.at then "✔ " else "🔒 ") .. Locale.t(u.key, { n = u.at }))
+			end
+			Kit.label(table.concat(lines, "\n"), { TextColor3 = Kit.colors.muted, LayoutOrder = order, Parent = list })
 		end,
 	})
 

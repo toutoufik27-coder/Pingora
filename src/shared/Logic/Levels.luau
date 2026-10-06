@@ -2,9 +2,12 @@ local Economy = require(script.Parent.Parent.Config.Economy)
 
 local Levels = {}
 
--- Adds xp; returns new level, new xp-in-level, and levels gained.
-function Levels.addXp(level: number, xp: number, amount: number): (number, number, number)
-	local gained = 0
+-- Adds xp. Below MAX_LEVEL it raises the level; at MAX_LEVEL it keeps
+-- counting into Legacy levels. Returns level, xp, levels gained, legacy,
+-- legacy levels gained.
+function Levels.addXp(level: number, xp: number, amount: number, legacy: number?): (number, number, number, number, number)
+	local gained, legacyGained = 0, 0
+	legacy = legacy or 0
 	xp += math.max(0, amount)
 	while level < Economy.MAX_LEVEL do
 		local need = Economy.xpForLevel(level)
@@ -16,21 +19,38 @@ function Levels.addXp(level: number, xp: number, amount: number): (number, numbe
 		gained += 1
 	end
 	if level >= Economy.MAX_LEVEL then
-		xp = 0
+		while xp >= Economy.LEGACY_XP do
+			xp -= Economy.LEGACY_XP
+			legacy += 1
+			legacyGained += 1
+		end
 	end
-	return level, xp, gained
+	return level, xp, gained, legacy :: number, legacyGained
 end
 
-function Levels.rebirthBonus(rebirths: number): number
+function Levels.xpNeed(level: number): number
+	if level >= Economy.MAX_LEVEL then
+		return Economy.LEGACY_XP
+	end
+	return Economy.xpForLevel(level)
+end
+
+-- Permanent sell bonus from Legacy levels.
+function Levels.legacyBonus(legacy: number): number
 	local total = 0
-	for i = 1, math.min(rebirths, #Economy.REBIRTH_BONUSES) do
-		total += Economy.REBIRTH_BONUSES[i]
+	for i = 1, math.min(legacy, #Economy.LEGACY_BONUSES) do
+		total += Economy.LEGACY_BONUSES[i]
 	end
 	return total
 end
 
-function Levels.canRebirth(level: number, coins: number, rebirths: number): boolean
-	return level >= Economy.REBIRTH_LEVEL and coins >= Economy.REBIRTH_COINS and rebirths < Economy.REBIRTH_MAX
+-- Title for a Legacy level (nil before the first one).
+function Levels.legacyTitle(legacy: number)
+	if legacy <= 0 then
+		return nil
+	end
+	local titles = Economy.LEGACY_TITLES
+	return titles[math.min(legacy, #titles)]
 end
 
 -- Next plot size step, or nil when maxed.

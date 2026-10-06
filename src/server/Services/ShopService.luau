@@ -211,7 +211,7 @@ local function chooseSecondLand(player: Player, landId: any)
 	if not p or not land or not land.available or landId == p.Land then
 		return
 	end
-	if p.Rebirths < Economy.SECOND_LAND_REBIRTHS then
+	if p.Legacy < Economy.LEGACY_SECOND_LAND then
 		return
 	end
 	p.SecondLand = landId

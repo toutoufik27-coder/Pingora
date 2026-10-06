@@ -26,7 +26,7 @@ local LOCK_STALE_SECONDS = 180
 local LOAD_ATTEMPTS = 6
 local MAIL_CAP = 200
 
-DataService.VERSION = 1
+DataService.VERSION = 2
 DataService.Loaded = Signal.new() -- (player, profile)
 DataService.Releasing = Signal.new() -- (player, profile) before the final save
 
@@ -61,7 +61,7 @@ function DataService.defaultProfile(): any
 		Kindness = 0,
 		Level = 1,
 		XP = 0,
-		Rebirths = 0,
+		Legacy = 0, -- Legacy levels earned after the max level
 		Land = nil, -- chosen after the first minutes
 		SecondLand = nil,
 		LandChanges = 0,
@@ -128,7 +128,11 @@ end
 
 local function migrate(data)
 	data.Version = data.Version or 1
-	-- future migrations go here: if data.Version < 2 then ... end
+	if data.Version < 2 then
+		-- v2: rebirth was replaced by Legacy levels (nothing resets any more)
+		data.Legacy = (data.Legacy or 0) + (data.Rebirths or 0)
+		data.Rebirths = nil
+	end
 	data.Version = DataService.VERSION
 	return data
 end

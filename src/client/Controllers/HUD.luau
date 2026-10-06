@@ -43,7 +43,7 @@ local function update()
 	end
 	coinsLabel.Text = "🪙 " .. Locale.num(p.Coins)
 	kindLabel.Text = "💗 " .. Locale.num(p.Kindness)
-	levelLabel.Text = Locale.t("ui.level", { n = p.Level }) .. (if p.Rebirths > 0 then " ★" .. p.Rebirths else "")
+	levelLabel.Text = Locale.t("ui.level", { n = p.Level }) .. (if (p.Legacy or 0) > 0 then " ★" .. p.Legacy else "")
 	local frac = if p.XPNeed > 0 then p.XP / p.XPNeed else 1
 	local fill = xpBar:FindFirstChild("Fill") :: Frame
 	fill.Size = UDim2.new(math.clamp(frac, 0, 1), 0, 1, 0)

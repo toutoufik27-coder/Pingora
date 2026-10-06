@@ -35,9 +35,9 @@ local function snapshot(player: Player, p: any)
 		Kindness = p.Kindness,
 		Level = p.Level,
 		XP = p.XP,
-		XPNeed = if p.Level >= Economy.MAX_LEVEL then 0 else Economy.xpForLevel(p.Level),
-		Rebirths = p.Rebirths,
-		RebirthBonus = Levels.rebirthBonus(p.Rebirths),
+		XPNeed = Levels.xpNeed(p.Level),
+		Legacy = p.Legacy,
+		LegacyBonus = Levels.legacyBonus(p.Legacy),
 		Land = p.Land,
 		SecondLand = p.SecondLand,
 		LandChanges = p.LandChanges,
@@ -119,10 +119,31 @@ function Progress.addXp(player: Player, n: number)
 		return
 	end
 	local before = p.Level
-	p.Level, p.XP = Levels.addXp(p.Level, p.XP, n)
+	local legacyGained
+	p.Level, p.XP, _, p.Legacy, legacyGained = Levels.addXp(p.Level, p.XP, n, p.Legacy)
 	if p.Level > before then
 		Net.notify(player, "note.levelUp", { level = p.Level }, "celebrate")
 		Progress.LevelUp:Fire(player, p.Level)
+		if p.Level >= Economy.MAX_LEVEL then
+			Net.notify(player, "note.maxLevel", nil, "celebrate")
+		end
+	end
+	-- Legacy levels only ever add: coins, a title, a sell bonus and unlocks
+	for i = legacyGained - 1, 0, -1 do
+		local level = p.Legacy - i
+		p.Coins += Economy.LEGACY_COINS * level
+		Net.notify(player, "note.legacyUp", { n = level, coins = Economy.LEGACY_COINS * level }, "celebrate")
+		if level == Economy.LEGACY_SECOND_LAND then
+			Net.notify(player, "note.unlockSecondLand", nil, "celebrate")
+		elseif level == Economy.LEGACY_COMPANION_SLOT then
+			Net.notify(player, "note.unlockCompanion", nil, "celebrate")
+		elseif level == Economy.LEGACY_THEME then
+			p.OwnedThemes.Legacy = true
+			Net.notify(player, "note.unlockTheme", nil, "celebrate")
+		end
+	end
+	if legacyGained > 0 then
+		Net.notifyAll("note.legacyAll", { name = player.DisplayName, n = p.Legacy }, "celebrate")
 	end
 	Progress.dirty(player)
 end
@@ -243,7 +264,7 @@ function Progress.luck(p: any): number
 end
 
 function Progress.sellBonus(p: any): number
-	return Levels.rebirthBonus(p.Rebirths) + Buffs.get("sellBonus")
+	return Levels.legacyBonus(p.Legacy) + Buffs.get("sellBonus")
 end
 
 function Progress.growBuff(_p: any): number

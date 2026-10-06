@@ -266,7 +266,8 @@ local function animalAction(player: Player, id: any, what: any)
 				count += 1
 			end
 		end
-		if not a.companion and count >= Animals.MAX_COMPANIONS then
+		local maxCompanions = Animals.MAX_COMPANIONS + (if p.Legacy >= Economy.LEGACY_COMPANION_SLOT then 1 else 0)
+		if not a.companion and count >= maxCompanions then
 			Net.notify(player, "note.companionsFull", nil, "warn")
 			return
 		end

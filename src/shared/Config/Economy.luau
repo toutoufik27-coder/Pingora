@@ -73,7 +73,6 @@ Economy.TOOL_TIERS = {
 -- Land
 Economy.LAND_CHOICE_LEVEL = 2
 Economy.LAND_CHANGE_COST = 5000 -- after the first free change
-Economy.SECOND_LAND_REBIRTHS = 1
 
 -- Interaction distance (studs) for shops and tiles
 Economy.SHOP_DISTANCE = 40
@@ -97,11 +96,22 @@ Economy.XP = {
 	tradeDone = 5,
 }
 
--- Rebirth ("Harvest Festival")
-Economy.REBIRTH_LEVEL = 50
-Economy.REBIRTH_COINS = 250000
-Economy.REBIRTH_MAX = 10
-Economy.REBIRTH_BONUSES = { 0.10, 0.08, 0.06, 0.05, 0.05, 0.04, 0.04, 0.03, 0.03, 0.02 }
+-- Legacy levels: after MAX_LEVEL, XP keeps counting into Legacy levels.
+-- Nothing is ever reset; each Legacy level only unlocks new things.
+Economy.LEGACY_XP = 20000 -- XP per Legacy level
+Economy.LEGACY_BONUSES = { 0.10, 0.08, 0.06, 0.05, 0.05, 0.04, 0.04, 0.03, 0.03, 0.02 } -- permanent sell bonus per level
+Economy.LEGACY_COINS = 1000 -- coins reward = this * legacy level
+Economy.LEGACY_SECOND_LAND = 1 -- Legacy level that unlocks a second land
+Economy.LEGACY_COMPANION_SLOT = 3 -- Legacy level that adds a 4th companion
+Economy.LEGACY_THEME = 5 -- Legacy level that unlocks the golden "Legacy" theme
+Economy.LEGACY_TITLES = {
+	{ en = "Seasoned Farmer", ar = "مزارع متمرّس" },
+	{ en = "Valley Hand", ar = "يد الوادي" },
+	{ en = "Master Grower", ar = "سيّد الزراعة" },
+	{ en = "Harvest Keeper", ar = "حارس الحصاد" },
+	{ en = "Valley Elder", ar = "حكيم الوادي" },
+	{ en = "Legend of Kinfield", ar = "أسطورة Kinfield" },
+}
 
 -- Kept scale (guaranteed mutations after a break)
 Economy.KEPT_SCALE_SECONDS_PER_MUTATION = 3600

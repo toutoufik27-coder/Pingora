@@ -48,6 +48,8 @@ Products.themes = {
 	{ id = "Desert", name = { en = "Oasis", ar = "واحة" }, fence = { 210, 160, 100 }, path = { 230, 200, 150 } },
 	{ id = "Winter", name = { en = "Winter", ar = "شتوي" }, fence = { 200, 220, 240 }, path = { 240, 245, 250 } },
 	{ id = "Zen", name = { en = "Zen", ar = "زِن" }, fence = { 60, 60, 60 }, path = { 180, 180, 170 } },
+	-- earned at a Legacy level, never sold
+	{ id = "Legacy", name = { en = "Golden Legacy", ar = "الإرث الذهبي" }, fence = { 230, 190, 60 }, path = { 245, 225, 160 }, legacy = true },
 }
 
 return Products
