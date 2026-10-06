@@ -31,7 +31,7 @@ local function mapFor(key: string): MemorySortedMap?
 		return m
 	end
 	local ok, result = pcall(function()
-		return MemoryStoreService:GetSortedMap("mkt1_" .. key)
+		return MemoryStoreService:GetSortedMap("mkt1_" .. string.gsub(key, "[^%w]", "_"))
 	end)
 	if ok then
 		maps[key] = result
@@ -62,6 +62,11 @@ local function list(player: Player, key: any, n: any, price: any)
 	price = math.floor(price)
 	local p = DataService.get(player)
 	if not p or n < 1 or n > 999 or not ItemLogic.isMarketable(key) then
+		return
+	end
+	-- mutated crops go through the trade window, so every market listing
+	-- stays findable under its plain item
+	if #ItemLogic.parse(key).mutations > 0 then
 		return
 	end
 	if Progress.distance(player, WorldBuilder.points.Market) > Economy.SHOP_DISTANCE then

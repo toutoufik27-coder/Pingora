@@ -62,6 +62,7 @@ local function snapshot(player: Player, p: any)
 		Listings = p.Listings,
 		Theme = p.Theme,
 		OwnedThemes = p.OwnedThemes,
+		Favorites = p.Favorites,
 		Passes = p.__passes or {},
 		Tutorial = p.Tutorial,
 		Buffs = Buffs.list(),

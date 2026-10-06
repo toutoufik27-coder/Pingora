@@ -79,6 +79,7 @@ local function pushAll()
 			scaffold.Size = Vector3.new(14, h, 14)
 			scaffold.CFrame = CFrame.new(WorldBuilder.points.Project + Vector3.new(0, h / 2 + 0.5, 0))
 			scaffold.Color = Make.color(current().color)
+			scaffold:SetAttribute("SignOffset", h / 2 + 4)
 			scaffold:SetAttribute("SignKey", "sign.project")
 			scaffold:SetAttribute("SignVars", HttpService:JSONEncode({ project = current().id, pct = math.floor(f * 100) }))
 		end
