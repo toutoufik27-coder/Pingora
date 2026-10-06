@@ -11,6 +11,16 @@ python -I tools/art/render_animals.py /tmp/parts.txt /tmp/animals
 python tools/art/montage.py /tmp/animals docs/animals-preview.png
 ```
 
+`build_meshes.py` turns the same data into smooth game meshes: the parts of
+each bone are fused (voxel remesh + smoothing), painted per vertex, and kept
+light (about 4–10k triangles per animal). Eyes, noses and the hive boards stay
+crisp. `--render` writes previews, `--export` writes one `.glb` per animal.
+
+```sh
+python -I tools/art/build_meshes.py /tmp/parts.txt /tmp/meshes --render
+python tools/art/montage.py /tmp/meshes docs/animals-preview.png
+```
+
 `stylized_animal_pack.py` is the Blender scene script from the art pass (with
 colours, eyes, legs and camera fixed). It builds the same animals as Blender
 meshes, which can be exported to FBX and imported in Studio later.
