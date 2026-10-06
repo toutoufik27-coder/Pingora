@@ -198,7 +198,7 @@ Animals.traits = {
 	Productive = { id = "Productive", name = { en = "Productive", ar = "منتج" }, desc = { en = "+25% products", ar = "+25% منتجات" } },
 	Swift = { id = "Swift", name = { en = "Swift", ar = "سريع" }, desc = { en = "Produces 20% faster", ar = "ينتج أسرع بـ 20%" } },
 	Lucky = { id = "Lucky", name = { en = "Lucky", ar = "محظوظ" }, desc = { en = "+1% mutation chance on your farm", ar = "+1% فرصة طفرات في مزرعتك" } },
-	Charming = { id = "Charming", name = { en = "Charming", ar = "جذاب" }, desc = { en = "Its products sell for 10% more", ar = "منتجاته تُباع بـ 10% أكثر" } },
+	Charming = { id = "Charming", name = { en = "Charming", ar = "جذاب" }, desc = { en = "Neighbours who visit get a small gift from it", ar = "الجيران الزائرون يحصلون منه على هدية صغيرة" } },
 }
 Animals.traitOrder = { "Productive", "Swift", "Lucky", "Charming" }
 

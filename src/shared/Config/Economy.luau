@@ -63,6 +63,22 @@ Economy.SHOP_SLOTS = 8
 -- Workshops
 Economy.SKIP_DAILY_LIMIT = 3
 
+-- Tools: tier 0 works on one tile, tier 1 on 3x3, tier 2 on 5x5.
+Economy.TOOLS = { "Basket", "Can", "SeedBag" }
+Economy.TOOL_TIERS = {
+	{ coins = 1500, level = 5 },
+	{ coins = 15000, level = 15 },
+}
+
+-- Land
+Economy.LAND_CHOICE_LEVEL = 2
+Economy.LAND_CHANGE_COST = 5000 -- after the first free change
+Economy.SECOND_LAND_REBIRTHS = 1
+
+-- Interaction distance (studs) for shops and tiles
+Economy.SHOP_DISTANCE = 40
+Economy.TILE_DISTANCE = 40
+
 -- Levels
 Economy.MAX_LEVEL = 50
 function Economy.xpForLevel(level: number): number
