@@ -123,7 +123,7 @@ Zones.list = {
 		origin = { 1200, 0, 0 },
 		ground = { 70, 110, 60 },
 		nodes = { Tree = 14, BerryBush = 8, Mushrooms = 8 },
-		wild = { "Pig", "Dog" },
+		wild = { "Rabbit", "Dog" },
 	},
 	{
 		id = "River",
@@ -163,7 +163,7 @@ end
 -- Taming: chance per offering of the right food while on a trip.
 Zones.TAME_CHANCE = 0.25
 Zones.TAME_FOOD = {
-	Pig = "Mushroom",
+	Rabbit = "Mushroom",
 	Dog = "Carrot",
 	Duck = "Rice",
 	Goat = "Sage",

@@ -44,7 +44,7 @@ local Lands: { [string]: Land } = {
 		name = { en = "Woodland", ar = "الغابة" },
 		color = { 74, 120, 70 },
 		weatherBonus = "Fog",
-		animal = "Pig",
+		animal = "Rabbit",
 		available = true,
 		order = 4,
 	},

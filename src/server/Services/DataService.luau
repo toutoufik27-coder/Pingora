@@ -26,7 +26,7 @@ local LOCK_STALE_SECONDS = 180
 local LOAD_ATTEMPTS = 6
 local MAIL_CAP = 200
 
-DataService.VERSION = 2
+DataService.VERSION = 3
 DataService.Loaded = Signal.new() -- (player, profile)
 DataService.Releasing = Signal.new() -- (player, profile) before the final save
 
@@ -132,6 +132,26 @@ local function migrate(data)
 		-- v2: rebirth was replaced by Legacy levels (nothing resets any more)
 		data.Legacy = (data.Legacy or 0) + (data.Rebirths or 0)
 		data.Rebirths = nil
+	end
+	if data.Version < 3 then
+		-- v3: pigs were replaced by rabbits (same job: truffles)
+		local colors = { Pink = "White", Spotted = "Spotted", Black = "Black", Golden = "Golden" }
+		for _, a in data.Animals or {} do
+			if a.species == "Pig" then
+				a.species = "Rabbit"
+				a.color = colors[a.color] or "White"
+			end
+		end
+		local seen = data.Almanac and data.Almanac.animals
+		if seen then
+			for id in table.clone(seen) do
+				local color = string.match(id, "^Pig:(.+)$")
+				if color then
+					seen[id] = nil
+					seen["Rabbit:" .. (colors[color] or "White")] = true
+				end
+			end
+		end
 	end
 	data.Version = DataService.VERSION
 	return data

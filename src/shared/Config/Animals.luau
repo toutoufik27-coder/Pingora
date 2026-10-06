@@ -109,23 +109,24 @@ Animals.species = {
 		},
 		size = 2,
 	},
-	Pig = {
-		id = "Pig",
-		name = { en = "Pig", ar = "خنزير" },
+	Rabbit = {
+		id = "Rabbit",
+		name = { en = "Rabbit", ar = "أرنب" },
 		price = 900,
 		level = 8,
-		product = "Truffle",
+		product = "Truffle", -- digs up truffles
 		interval = 600,
 		amount = 1,
-		food = { "Potato", "Mushroom", "Corn" },
+		food = { "Carrot", "Clover", "Mushroom" },
 		job = "truffle",
 		colors = {
-			{ id = "Pink", rarity = 1, rgb = { 250, 180, 180 } },
-			{ id = "Spotted", rarity = 2, rgb = { 230, 200, 190 } },
+			{ id = "White", rarity = 1, rgb = { 245, 245, 240 } },
+			{ id = "Brown", rarity = 1, rgb = { 150, 110, 75 } },
+			{ id = "Spotted", rarity = 2, rgb = { 230, 215, 200 } },
 			{ id = "Black", rarity = 3, rgb = { 50, 45, 45 } },
 			{ id = "Golden", rarity = 5, rgb = { 255, 210, 60 } },
 		},
-		size = 2,
+		size = 1.3,
 	},
 	Bee = {
 		id = "Bee",
@@ -192,7 +193,7 @@ Animals.species = {
 	},
 } :: { [string]: Species }
 
-Animals.order = { "Dog", "Chicken", "Duck", "Cat", "Cow", "Goat", "Sheep", "Pig", "Bee", "Horse" }
+Animals.order = { "Dog", "Chicken", "Duck", "Cat", "Cow", "Goat", "Sheep", "Rabbit", "Bee", "Horse" }
 
 Animals.traits = {
 	Productive = { id = "Productive", name = { en = "Productive", ar = "منتج" }, desc = { en = "+25% products", ar = "+25% منتجات" } },
