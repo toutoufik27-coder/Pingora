@@ -114,18 +114,20 @@ def setup_scene():
     scene = bpy.context.scene
     scene.render.engine = "CYCLES"
     scene.cycles.device = "CPU"
-    scene.cycles.samples = 48
-    scene.cycles.use_denoising = False
+    scene.cycles.samples = 96
+    scene.cycles.use_denoising = True
     scene.render.resolution_x = scene.render.resolution_y = 560
-    scene.view_settings.look = "AgX - Base Contrast"
+    scene.view_settings.view_transform = "Standard"
+    scene.view_settings.look = "Medium Contrast"
+    scene.view_settings.exposure = -1.3
     scene.world = bpy.data.worlds.new("w")
-    scene.world.color = (0.62, 0.6, 0.58)
+    scene.world.color = (0.22, 0.22, 0.23)
     bpy.ops.mesh.primitive_plane_add(size=60)
     floor = bpy.context.object
     fm = bpy.data.materials.new("floor")
-    fm.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.55, 0.55, 0.56, 1)
+    fm.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.75, 0.75, 0.75, 1)
     floor.data.materials.append(fm)
-    for loc, energy, size in [((-4, 6, 7), 800, 5), ((6, 3, 4), 380, 5), ((0, -6, 5), 450, 5)]:
+    for loc, energy, size in [((-3, 6, 8), 1300, 4), ((7, 4, 3), 380, 6), ((0, -6, 5), 500, 4), ((2, 9, 1), 260, 8), ((9, -1, 2), 220, 8)]:
         bpy.ops.object.light_add(type="AREA", location=loc)
         light = bpy.context.object
         light.data.energy = energy
@@ -148,9 +150,18 @@ def render(scene, cam, built):
         hi = Vector((max(p.x for p in pts), max(p.y for p in pts), max(p.z for p in pts)))
         c = (lo + hi) / 2
         r = (hi - lo).length / 2
-        for view, d in (("front", Vector((0.9, 0.75, 0.3))), ("side", Vector((1.0, 0.05, 0.12)))):
-            cam.location = c + d.normalized() * r * 3.0
-            cam.rotation_euler = (c - cam.location).to_track_quat("-Z", "Y").to_euler()
+        views = (
+            ("front", Vector((0.9, 0.75, 0.3)), False),
+            ("side", Vector((1.0, 0.05, 0.12)), False),
+            ("ortho_front", Vector((0, 1, 0)), True),  # facing the camera, like the reference sheets
+            ("ortho_side", Vector((1, 0, 0)), True),  # facing right
+        )
+        for view, d, ortho in views:
+            cam.data.type = "ORTHO" if ortho else "PERSP"
+            cam.data.ortho_scale = (hi.z - lo.z) * 1.15
+            target = Vector((c.x, c.y, (lo.z + hi.z) / 2))
+            cam.location = target + d.normalized() * r * 3.0
+            cam.rotation_euler = (target - cam.location).to_track_quat("-Z", "Y").to_euler()
             scene.render.filepath = f"{OUT}/{name}_{view}.png"
             bpy.ops.render.render(write_still=True)
 

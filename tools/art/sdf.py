@@ -140,22 +140,61 @@ class Model:
     def detail(self, shape, color, bone="head"):
         self.details.append(Part(shape, color, bone, 0, 0))
 
+    def volume(self, voxel=0.014, details=False):
+        """Signed distances on a grid. Returns (grid, lo corner).
+
+        Each part is only evaluated inside its own bounding box (plus its blend
+        distance): further away it cannot change the smooth union."""
+        parts = self.parts + (self.details if details else [])
+        lo = np.min([p.shape.bounds()[0] for p in parts], axis=0) - 0.1
+        hi = np.max([p.shape.bounds()[1] for p in parts], axis=0) + 0.1
+        n = np.ceil((hi - lo) / voxel).astype(int) + 1
+        d = np.full(n, 1e3, np.float64)
+
+        def region(part, margin):
+            a, b = part.shape.bounds()
+            i0 = np.clip(np.floor((a - margin - lo) / voxel).astype(int), 0, n)
+            i1 = np.clip(np.ceil((b + margin - lo) / voxel).astype(int) + 1, 0, n)
+            axes = [lo[k] + np.arange(i0[k], i1[k]) * voxel for k in range(3)]
+            gx, gy, gz = np.meshgrid(*axes, indexing="ij")
+            pts = np.stack([gx.ravel(), gy.ravel(), gz.ravel()], axis=1)
+            sl = tuple(slice(i0[k], i1[k]) for k in range(3))
+            return sl, part.shape.dist(pts).reshape(gx.shape)
+
+        for part in self.parts:
+            sl, pd = region(part, part.blend + 2 * voxel)
+            d[sl] = smin(d[sl], pd, part.blend)
+        if details:
+            for part in self.details:
+                sl, pd = region(part, 2 * voxel)
+                d[sl] = np.minimum(d[sl], pd)
+        return d, lo
+
+    def silhouette(self, view, voxel=0.01):
+        """Orthographic silhouette, rows top to bottom. view: front, side (facing right), back, top."""
+        if getattr(self, "_sil_voxel", None) != voxel:
+            self._sil_vol, _ = self.volume(voxel, details=True)
+            self._sil_voxel = voxel
+        vol = self._sil_vol
+        inside = vol < 0  # axes x, y, z
+        if view in ("front", "back"):
+            img = inside.any(axis=2).T  # (y, x)
+            if view == "back":
+                img = img[:, ::-1]
+        elif view == "side":
+            img = inside.any(axis=0)  # (y, z); forward is -z, show it on the right
+            img = img[:, ::-1]
+        else:  # top: looking down, forward (-z) at the bottom of the image
+            img = inside.any(axis=1).T  # (z, x)
+        return img[::-1]  # y up (top view: back at the top)
+
     def mesh(self, voxel=0.014):
         """Marching cubes over the smooth union. Returns verts, faces, colours, bones."""
-        lo = np.min([p.shape.bounds()[0] for p in self.parts], axis=0) - 0.1
-        hi = np.max([p.shape.bounds()[1] for p in self.parts], axis=0) + 0.1
-        axes = [np.arange(lo[i], hi[i] + voxel, voxel) for i in range(3)]
-        gx, gy, gz = np.meshgrid(*axes, indexing="ij")
-        pts = np.stack([gx.ravel(), gy.ravel(), gz.ravel()], axis=1).astype(np.float64)
-        d = None
-        for part in self.parts:
-            pd = part.shape.dist(pts)
-            d = pd if d is None else smin(d, pd, part.blend)
-        vol = d.reshape(gx.shape)
+        vol, lo = self.volume(voxel)
         verts, faces, _, _ = measure.marching_cubes(vol, level=0.0, spacing=(voxel, voxel, voxel))
         verts = verts + lo
         # colour and bone of the part each vertex lies on
-        dists = np.stack([p.shape.dist(verts) - p.prio * 0.01 for p in self.parts], axis=1)
+        dists = np.stack([p.shape.dist(verts) - p.prio * 0.002 for p in self.parts], axis=1)
         owner = np.argmin(dists, axis=1)
         colors = np.array([self.parts[i].color for i in owner], float)
         bones = [self.parts[i].bone for i in owner]

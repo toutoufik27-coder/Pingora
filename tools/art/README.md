@@ -40,3 +40,18 @@ python tools/art/compare.py /tmp/sculpt docs/art/chicken-duck-compare.png Chicke
 ```
 
 `compare.py` puts the concept art next to the renders.
+
+## Fitting to a reference turnaround
+
+Reference sheets live in `docs/art/ref/` (front, side, back and top views in a
+row on white). `fit.py` overlays the model's silhouettes on them (red: only
+the reference, blue: only the model) and prints the overlap; `autofit.py`
+nudges the model's proportion parameters (`CHICKEN`, `DUCK` in `models.py`)
+to maximise that overlap. Hand-tuned parameters can be held fixed with
+`FREEZE=name,name`.
+
+```sh
+python -I tools/art/fit.py Chicken docs/art/ref/chicken-turnaround.png /tmp/fit.png
+FREEZE=wing_x python -I tools/art/autofit.py Chicken docs/art/ref/chicken-turnaround.png /tmp/fit.json
+python tools/art/compare_ref.py /tmp/sculpt Chicken docs/art/ref/chicken-turnaround.png /tmp/cmp.png
+```
