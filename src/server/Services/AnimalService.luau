@@ -390,17 +390,8 @@ function AnimalService.refreshCompanions(player: Player)
 	for id, a in p.Animals do
 		if a.companion then
 			local s = Animals.species[a.species]
-			local color = Color3.new(1, 1, 1)
-			for _, c in s.colors do
-				if c.id == a.color then
-					color = Make.color(c.rgb)
-				end
-			end
-			local m = Make.model("Companion_" .. player.UserId .. "_" .. id, folder)
-			local size = math.min(s.size, 2.5)
-			local body = Make.part({ Name = "Body", Size = Vector3.new(size * 0.8, size * 0.7, size * 1.3), CFrame = CFrame.new(0, -100, 0), Color = color, CanCollide = false, Parent = m })
-			body.CanQuery = false
-			m.PrimaryPart = body
+			local m, root = Make.animal(folder, "Companion_" .. player.UserId .. "_" .. id, a.species, a.color, CFrame.new(0, -100, 0))
+			root:SetAttribute("Companion", true)
 			companions[player][id] = m
 			if s.job == "rider" then
 				speed = 22
@@ -418,13 +409,17 @@ local function updateCompanions(dt: number)
 	for player, list in companions do
 		local char = player.Character
 		local root = char and char:FindFirstChild("HumanoidRootPart") :: BasePart?
-		if root then
+		local hum = char and char:FindFirstChildOfClass("Humanoid")
+		if root and hum then
+			-- where the player's feet are
+			local ground = root.Position.Y - hum.HipHeight - root.Size.Y / 2
 			local i = 0
 			for _, m in list do
 				i += 1
-				local offset = root.CFrame * CFrame.new((i - 2) * 3, -2, 5)
+				local half = (m.PrimaryPart :: BasePart).Size.Y / 2
+				local offset = root.CFrame * CFrame.new((i - 2) * 3.5, 0, 5 + i)
 				local current = m:GetPivot()
-				local target = CFrame.new(offset.Position) * (root.CFrame - root.CFrame.Position)
+				local target = CFrame.new(offset.X, ground + half, offset.Z) * (root.CFrame - root.CFrame.Position)
 				m:PivotTo(current:Lerp(target, math.clamp(dt * 6, 0, 1)))
 			end
 		end

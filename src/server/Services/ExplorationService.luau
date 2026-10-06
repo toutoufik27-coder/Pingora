@@ -129,10 +129,8 @@ local function spawnWild(zone, slot: number)
 	if zone.id == "Mountain" then
 		pos = origin + Vector3.new(rng:NextNumber(-60, 60), 0, rng:NextNumber(20, 90))
 	end
-	local m = Make.model("Wild_" .. zone.id .. "_" .. slot, folder)
-	local color = Make.color(s.colors[1].rgb)
-	local body = Make.part({ Name = "Body", Size = Vector3.new(s.size * 0.8, s.size * 0.7, s.size * 1.3), CFrame = CFrame.new(pos + Vector3.new(0, s.size * 0.4, 0)), Color = color, Parent = m })
-	m.PrimaryPart = body
+	local facing = CFrame.Angles(0, rng:NextNumber(0, math.pi * 2), 0)
+	local _, body = Make.animal(folder, "Wild_" .. zone.id .. "_" .. slot, species, s.colors[1].id, CFrame.new(pos) * facing)
 	local pp = Make.prompt(body, "prompt.tame", "Tame", 0.8, 10)
 	pp:SetAttribute("WildSpecies", species)
 	pp:SetAttribute("WildZone", zone.id)

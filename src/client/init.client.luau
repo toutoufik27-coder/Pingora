@@ -9,6 +9,7 @@ local HUD = require(script.Controllers.HUD)
 local Farming = require(script.Controllers.Farming)
 local World = require(script.Controllers.World)
 local Feedback = require(script.Controllers.Feedback)
+local Animator = require(script.Controllers.Animator)
 
 State.start()
 local gui = App.build()
@@ -24,6 +25,7 @@ HUD.build(gui)
 Farming.build(gui)
 Feedback.build(gui)
 World.start()
+Animator.start()
 
 -- start listening last so no push arrives before its handler exists
 Net.startClient()

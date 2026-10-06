@@ -1,5 +1,9 @@
 -- Small helpers for building geometry from code.
 
+local CollectionService = game:GetService("CollectionService")
+local Shared = game:GetService("ReplicatedStorage"):WaitForChild("Shared")
+local AnimalShapes = require(Shared.Art.AnimalShapes)
+
 local Make = {}
 
 function Make.color(rgb: { number }): Color3
@@ -86,6 +90,30 @@ function Make.sign(part: BasePart, key: string, vars: string?, offsetY: number?)
 		part:SetAttribute("SignVars", vars)
 	end
 	part:SetAttribute("SignOffset", offsetY or 6)
+end
+
+-- An animal: an invisible root part that holds prompts and moves on the
+-- server. Each client draws and animates the look itself (client Animator),
+-- so walking, wagging and pecking cost no network traffic.
+-- `ground` is where its feet stand; the animal faces ground's LookVector.
+function Make.animal(parent: Instance, name: string, species: string, colorId: string, ground: CFrame): (Model, BasePart)
+	local w, h, d = AnimalShapes.bounds(species)
+	local m = Make.model(name, parent)
+	local root = Make.part({
+		Name = "Root",
+		Size = Vector3.new(math.max(w, 1), math.max(h, 1), math.max(d, 1)),
+		CFrame = ground * CFrame.new(0, h / 2, 0),
+		Transparency = 1,
+		CanCollide = false,
+		CanQuery = false,
+		CanTouch = false,
+	})
+	root:SetAttribute("Species", species)
+	root:SetAttribute("Color", colorId)
+	root.Parent = m
+	m.PrimaryPart = root
+	CollectionService:AddTag(root, "KinAnimal")
+	return m, root
 end
 
 -- A simple low-poly tree.

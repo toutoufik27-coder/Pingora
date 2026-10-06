@@ -301,23 +301,7 @@ function PlotService.refreshBuildings(index: number)
 end
 
 local function animalModel(parent: Instance, a: any, at: CFrame): Model
-	local species = Animals.species[a.species]
-	local color = Color3.fromRGB(240, 240, 240)
-	for _, c in species.colors do
-		if c.id == a.color then
-			color = Make.color(c.rgb)
-		end
-	end
-	local size = species.size
-	local m = Make.model("Animal_" .. a.id, parent)
-	if a.species == "Bee" then
-		local hive = Make.part({ Name = "Hive", Size = Vector3.new(2.4, 2.6, 2.4), CFrame = at * CFrame.new(0, 1.3, 0), Color = color, Material = Enum.Material.Wood, Parent = m })
-		m.PrimaryPart = hive
-	else
-		local body = Make.part({ Name = "Body", Size = Vector3.new(size * 0.8, size * 0.7, size * 1.3), CFrame = at * CFrame.new(0, size * 0.55, 0), Color = color, Parent = m })
-		Make.part({ Name = "Head", Size = Vector3.new(size * 0.55, size * 0.55, size * 0.55), CFrame = body.CFrame * CFrame.new(0, size * 0.3, -size * 0.75), Color = color, Parent = m })
-		m.PrimaryPart = body
-	end
+	local m = Make.animal(parent, "Animal_" .. a.id, a.species, a.color, at)
 	return m
 end
 

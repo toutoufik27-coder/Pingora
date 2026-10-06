@@ -89,20 +89,13 @@ end
 
 local function spawnFox(start: CFrame, loot)
 	local folder = Make.folder("Foxes", WorldBuilder.root :: Folder)
-	local m = Make.model("Fox", folder)
-	local body = Make.part({ Name = "Body", Size = Vector3.new(1.6, 1.4, 2.8), CFrame = start, Color = Color3.fromRGB(230, 120, 40), CanCollide = false, Parent = m })
-	Make.part({ Name = "Tail", Size = Vector3.new(0.6, 0.6, 1.6), CFrame = start * CFrame.new(0, 0.3, 1.9), Color = Color3.fromRGB(250, 240, 230), CanCollide = false, Parent = m })
-	local weld = Instance.new("WeldConstraint")
-	weld.Part0 = body
-	weld.Part1 = m:FindFirstChild("Tail") :: BasePart
-	weld.Parent = body
-	;(m:FindFirstChild("Tail") :: BasePart).Anchored = false
-	m.PrimaryPart = body
+	-- start was the centre of the old 1.4-stud body; the fox stands below it
+	local m, body = Make.animal(folder, "Fox", "Fox", "Orange", start * CFrame.new(0, -0.7, 0))
 	local pp = Make.prompt(body, "prompt.catchFox", "Catch!", 0, 12)
 	pp:SetAttribute("Fox", true)
 	foxes[m] = loot
 	-- run toward the forest portal side of the valley
-	local goal = CFrame.new(380, start.Y, rng:NextNumber(-200, 200))
+	local goal = CFrame.new(380, body.Position.Y, rng:NextNumber(-200, 200))
 	local tween = TweenService:Create(body, TweenInfo.new(70, Enum.EasingStyle.Linear), { CFrame = goal })
 	tween:Play()
 	task.delay(72, function()
