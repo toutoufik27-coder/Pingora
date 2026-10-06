@@ -18,7 +18,6 @@ local Animator = {}
 local TAG = "KinAnimal"
 local CULL_DISTANCE = 180 -- no animation updates beyond this
 local WANDER_SPEED = 2
-local SPOT_COLOR = { 55, 45, 40 }
 
 type Rig = {
 	root: BasePart,
@@ -84,8 +83,13 @@ local function newPart(model: Model, size: Vector3, color: Color3, opts: { [stri
 	p.BottomSurface = Enum.SurfaceType.Smooth
 	p.Material = Enum.Material.SmoothPlastic
 	if opts then
-		if opts.shape then
-			p.Shape = (Enum.PartType :: any)[opts.shape]
+		if opts.shape == "Ellipsoid" then
+			-- a sphere mesh stretches to the part's size: soft, rounded shapes
+			local mesh = Instance.new("SpecialMesh")
+			mesh.MeshType = Enum.MeshType.Sphere
+			mesh.Parent = p
+		elseif opts.shape == "Cylinder" then
+			p.Shape = Enum.PartType.Cylinder
 		end
 		if opts.mat then
 			p.Material = (Enum.Material :: any)[opts.mat]
@@ -170,6 +174,10 @@ local function build(root: BasePart): Rig?
 	local sparkleOn: BasePart? = nil
 	for _, part in shape.parts do
 		local opts = part.opts
+		-- patches only show on "Spotted" animals
+		if opts and opts.spots and colorId ~= "Spotted" then
+			continue
+		end
 		local boneIndex = index[part.bone] or 0
 		local size = vec(part.size)
 		local rest = CFrame.new(vec(part.pos))
@@ -178,21 +186,10 @@ local function build(root: BasePart): Rig?
 		end
 		local p = addPart(boneIndex, size, rest, color3(AnimalShapes.colorOf(part.color, rgb)), opts)
 		local key = part.color
-		if (key == "main" or key == "dark" or key == "light") and not (opts and opts.tint == false) then
+		if AnimalShapes.isShade(key) and not (opts and opts.tint == false) then
 			table.insert(rig.tinted, { part = p, key = key })
 			if not sparkleOn and key == "main" then
 				sparkleOn = p
-			end
-		end
-		-- patches on spotted animals, two on each side of the body
-		if opts and opts.spots and colorId == "Spotted" then
-			local spot = color3(SPOT_COLOR)
-			for _, side in { -1, 1 } do
-				for k, zf in { -0.22, 0.25 } do
-					local s = Vector3.new(0.04, size.Y * (if k == 1 then 0.45 else 0.35), size.Z * 0.28)
-					local at = rest * CFrame.new(side * (size.X / 2 + 0.01), size.Y * (if k == 1 then 0.08 else -0.1), size.Z * zf * side)
-					addPart(boneIndex, s, at, spot, nil)
-				end
 			end
 		end
 	end

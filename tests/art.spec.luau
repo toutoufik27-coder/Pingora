@@ -45,3 +45,21 @@ T.test("shades stay in range", function()
 		T.truthy(dark[k] >= 0 and dark[k] <= 255)
 	end
 end)
+
+T.test("part options are not shared between parts", function()
+	-- eyes are ellipsoids even though blocks are made from the same option tables
+	for _, id in { "Chicken", "Bee", "Cow" } do
+		for _, p in AnimalShapes.get(id).parts do
+			if p.color == "eyeWhite" then
+				T.eq(p.opts.shape, "Ellipsoid", id .. " eye")
+			end
+		end
+	end
+	local blocks = 0
+	for _, p in AnimalShapes.get("Bee").parts do
+		if p.opts.shape == "Block" then
+			blocks += 1
+		end
+	end
+	T.truthy(blocks >= 10, "hive is made of boards")
+end)
